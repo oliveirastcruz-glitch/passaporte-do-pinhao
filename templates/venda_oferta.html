@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ oferta[0] }} | Passaporte do Pinhão</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Detalhes da Oferta</h1>
+        <a href="/" class="botao">Voltar para página inicial</a>
+    </header>
+
+    <main>
+        <div class="oferta-detalhe">
+            <h2>{{ oferta[0] }}</h2> <!-- título -->
+            <p>{{ oferta[1] }}</p> <!-- descrição -->
+            <p><strong>Preço:</strong> R$ {{ oferta[2] }}</p>
+            <p><em>Empresa:</em> {{ oferta[4] }}</p>
+            <p><em>Telefone:</em> {{ oferta[5] }}</p>
+            {% if oferta[3] %}
+                <img src="{{ oferta[3] }}" alt="Imagem da oferta" width="300">
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Passaporte do Pinhão. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

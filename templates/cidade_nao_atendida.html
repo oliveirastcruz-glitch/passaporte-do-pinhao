@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cidade não atendida</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin-top: 40px;
+            background: #fff;
+            padding: 30px 30px 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 510px;
+            min-width: 470px;
+            text-align: center;
+        }
+        .container h1 {
+            font-size: 22px;
+            color: #e53935;
+            margin-bottom: 18px;
+        }
+        .container p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Infelizmente ainda não atendemos sua cidade.</h1>
+        <p>
+            No momento, nosso serviço está disponível apenas para cidades selecionadas.<br>
+            Sua solicitação foi registrada e nossa equipe entrará em contato assim que possível.<br>
+            Você pode continuar o cadastro como comprador ou voltar para o início.
+        </p>
+        <div class="buttons">
+            <button onclick="window.location.href='/'">Voltar para o início</button>
+            <button onclick="window.location.href='/continuar_comprador'">Continuar cadastro como comprador</button>
+        </div>
+    </div>
+</body>
+</html>

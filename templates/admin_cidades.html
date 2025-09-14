@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Gerenciar Cidades</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .admin-container { max-width: 700px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1 { margin-bottom: 24px; }
+        form { display: flex; gap: 12px; margin-bottom: 24px; }
+        input, select, button { padding: 8px 12px; border-radius: 4px; border: 1px solid #ccc; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+        .ativo { color: green; font-weight: bold; }
+        .inativo { color: red; font-weight: bold; }
+        .btn-ativar, .btn-desativar { background: #338a53; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-desativar { background: #b71c1c; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Gerenciar Cidades</h1>
+        <form method="POST" action="/admin/cidades">
+            <input type="text" name="nome" placeholder="Nome da cidade" required>
+            <input type="text" name="estado" placeholder="Estado (UF)" required maxlength="2">
+            <button type="submit">Adicionar Cidade</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            <body>
+                <h1>Administração de Cidades</h1>
+                <form method="POST">
+                    <input type="text" name="nome" placeholder="Nome da cidade" required>
+                    <input type="text" name="estado" placeholder="Estado" required maxlength="2">
+                    <button type="submit">Adicionar Cidade</button>
+                </form>
+                <h2>Cidades cadastradas</h2>
+                <table border="1">
+                    <tr><th>ID</th><th>Nome</th><th>Estado</th><th>Ativo</th></tr>
+                    {% for cidade in cidades %}
+                    <tr>
+                        <td>{{ cidade[0] }}</td>
+                        <td>{{ cidade[1] }}</td>
+                        <td>{{ cidade[2] }}</td>
+                        <td>{{ cidade[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <h2>Usuários cadastrados</h2>
+                <table border="1">
+                    <tr><th>ID</th><th>Nome</th><th>Email</th><th>Senha Hash</th><th>Tipo</th></tr>
+                    {% for u in usuarios %}
+                    <tr>
+                        <td>{{ u[0] }}</td>
+                        <td>{{ u[1] }}</td>
+                        <td>{{ u[2] }}</td>
+                        <td>{{ u[3] }}</td>
+                        <td>{{ u[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <h2>Empresas cadastradas</h2>
+                <table border="1">
+                    <tr>
+                        {% for col in empresas[0]|length|range %}
+                            <th>Col {{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for e in empresas %}
+                    <tr>
+                        {% for val in e %}
+                            <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+Onde alterei:
+
+cadastro_etapa1.html:
+Adicionei/ajustei o JavaScript para validação AJAX do e-mail, exibição do modal, bloqueio de submit e feedback visual.
+Ajustei a função do botão "Tentar outro" para limpar o campo de e-mail e focar automaticamente.
+Garanti que o modal (id="modal-email-existe") está presente e funcional no HTML.
+Como foi feito o código:
+
+Usei um listener no campo de e-mail para disparar uma requisição AJAX (fetch) para /verifica_existente sempre que o usuário digita.
+Se o e-mail já existe, seto um atributo data-existe="1" no input, deixo o campo vermelho, mostro mensagem e abro o modal bloqueante.
+No submit do formulário, verifico se o atributo está setado ou se a flag JS emailExiste está true. Se sim, bloqueio o submit, mostro o modal e impeço o avanço.
+O botão "Tentar outro" limpa o campo, remove o atributo, reseta a flag e foca no input.
+O que usei:
+
+JavaScript puro (sem dependências externas).
+AJAX com fetch para comunicação assíncrona com o backend.
+Manipulação de DOM para feedback visual e modal.
+Backend Flask para endpoint de verificação.
+Como pensei para evitar erros:
+
+Sincronizei o feedback visual (campo vermelho, mensagem) com o modal, para não deixar dúvidas ao usuário.
+Usei tanto atributo no input quanto variável JS para garantir bloqueio mesmo se o usuário tentar burlar.
+O modal é exibido imediatamente ao detectar e-mail já cadastrado, evitando submit duplo.
+O campo é limpo ao tentar outro e-mail, evitando que o usuário precise apagar manualmente.
+O submit é bloqueado em todas as situações de erro, inclusive se o AJAX falhar.
+O que foi o acerto:
+
+Experiência do usuário clara, moderna e impossível de burlar.
+Feedback visual e modal sempre sincronizados.
+Código fácil de replicar e adaptar para outros campos (CPF, CNPJ, telefone, etc).
+O que aprendi:
+
+O segredo está em garantir o bloqueio tanto no input quanto no submit, e dar feedback visual imediato.
+O uso de modal bloqueante é muito mais intuitivo do que só mensagem embaixo do campo.
+Limpar o campo ao tentar outro valor agiliza o fluxo e reduz frustração.
+Como replicar em outros lugares:
+
+Adicione um modal HTML semelhante ao final do seu formulário.
+Use o mesmo padrão de JS: AJAX para checar existência, atributo/flag para bloquear, modal para feedback.
+No submit, sempre cheque a flag/atributo antes de enviar.
+No botão de tentar outro, limpe o campo e foque.
+Adapte o endpoint backend para o campo desejado (CPF, CNPJ, etc).
+Se quiser, posso gerar um snippet pronto para copiar e colar em outros formulários!

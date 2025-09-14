@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Etapa 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .cadastro-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            width: 100%;
+            max-width: 700px;
+            margin: auto;
+            font-family: 'Arial', sans-serif;
+        }
+        .cadastro-container h1 {
+            margin-bottom: 10px;
+            position: relative;
+            text-align: left;
+        }
+        .cadastro-container h1 span {
+            position: absolute;
+            top: 0;
+        }
+        .cadastro-container h1 .vendedor {
+            right: 0;
+            color: red;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .cadastro-container h1 .comprador {
+            right: 0;
+            color: #32CD32; /* Verde limão */
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .cadastro-container .separator {
+            border-bottom: 2px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #555;
+        }
+        .form-group input::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+        .form-container {
+            margin-top: -20px; /* Subir o formulário 20px para se aproximar da linha superior */
+        }
+        .form-group-inline {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .form-group-inline > div {
+            flex: 1;
+        }
+        .form-group-inline .left {
+            text-align: left;
+        }
+        .form-group-inline .right {
+            text-align: right;
+        }
+        .form-group-inline input,
+        .form-group-inline select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: Arial, sans-serif; /* Estilo da fonte ajustado para combinar com o telefone */
+        }
+        .form-group-inline label {
+            display: block;
+            margin-bottom: 5px; /* Espaço entre o título e o campo abaixo */
+            margin-top: 15px; /* Espaço entre o título e o campo acima */
+            text-align: left; /* Alinha o título à esquerda do campo */
+            font-family: Arial, sans-serif; /* Estilo da fonte ajustado para combinar com o telefone */
+            color: #333; /* Cor uniforme para os títulos */
+            padding-left: 10px; /* Adiciona 10px de deslocamento para a direita */
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .buttons button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="cadastro-container">
+        <h1>Me fala mais, sobre você!</h1>
+        <div class="separator"></div>
+        <form action="/cadastro_etapa2" method="POST">
+            <div class="form-container">
+                <div class="form-group-inline">
+                    <div class="left">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                    </div>
+                    <div class="right">
+                        <label for="sobrenome">Sobrenome</label>
+                        <input type="text" id="sobrenome" name="sobrenome" placeholder="Digite seu sobrenome" required>
+                    </div>
+                </div>
+                <div class="form-group-inline">
+                    <div class="left">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite um CPF válido" required>
+                        <div id="cpf-msg" style="color:red;font-size:13px;"></div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                    <div id="email-msg" style="color:red;font-size:13px;"></div>
+                </div>
+                    </div>
+                    <div class="right">
+                        <label for="sexo">Sexo</label>
+                        <select id="sexo" name="sexo" required>
+                            <option value="masculino">Masculino</option>
+                            <option value="feminino">Feminino</option>
+                            <option value="nao_informar">Prefiro não informar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group-inline">
+                    <div class="left">
+                        <label for="data_nascimento">Data de Nascimento</label>
+                        <input type="date" id="data_nascimento" name="data_nascimento">
+                    </div>
+                    <div class="right">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade" name="cidade" placeholder="Digite sua cidade" required>
+                    </div>
+                </div>
+                <div class="form-group-inline">
+                    <div class="left">
+                        <label for="pais">País</label>
+                        <select id="pais" name="pais" required>
+                            <option value="brasil">Brasil</option>
+                            <option value="estados_unidos">Estados Unidos</option>
+                            <option value="canada">Canadá</option>
+                            <option value="reino_unido">Reino Unido</option>
+                            <option value="alemanha">Alemanha</option>
+                            <option disabled>──────────</option>
+                            <option value="argentina">Argentina</option>
+                            <option value="uruguai">Uruguai</option>
+                            <option value="paraguai">Paraguai</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="right">
+                        <label for="estado">Estado</label>
+                        <input type="text" id="estado" name="estado" placeholder="Digite seu estado" required>
+                    </div>
+                </div>
+                <div class="form-group-inline">
+                    <div class="left">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone com DDD" required>
+                    </div>
+                    <div class="right">
+                        <label for="foto">Foto (opcional)</label>
+                        <input type="file" id="foto" name="foto" accept="image/*">
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="button" onclick="window.location.assign('/cadastro')">Voltar</button>
+                <button type="submit">Avançar</button>
+            </div>
+        </form>
+        <!-- Modal flutuante para e-mail já cadastrado -->
+        <div id="modal-email-existe" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:9999;align-items:center;justify-content:center;">
+            <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.18);max-width:350px;width:90vw;text-align:center;position:relative;">
+                <span style="position:absolute;top:8px;right:16px;font-size:22px;cursor:pointer;" onclick="fecharModalEmailExiste()">&times;</span>
+                <h2 style="color:#dc3545;margin-bottom:12px;">E-mail já cadastrado!</h2>
+                <p>Deseja recuperar a senha ou tentar outro e-mail?</p>
+                <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;">
+                    <a href="/esqueci-senha" style="background:#007bff;color:#fff;padding:8px 16px;border-radius:4px;text-decoration:none;">Recuperar senha</a>
+                    <button onclick="fecharModalEmailExiste()" style="background:#6c757d;color:#fff;padding:8px 16px;border:none;border-radius:4px;">Tentar outro</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Robustez: mostra modal e bloqueia submit se e-mail já cadastrado
+        const emailInput = document.getElementById('email');
+        const msgDiv = document.getElementById('email-msg');
+        const modal = document.getElementById('modal-email-existe');
+        let emailExiste = false;
+        emailInput.addEventListener('input', function () {
+            const email = emailInput.value.trim();
+            if (email.length > 5 && email.includes('@')) {
+                fetch('/verifica_existente', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'tipo=email&valor=' + encodeURIComponent(email)
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.existe) {
+                        msgDiv.innerHTML = 'E-mail já cadastrado! <a href="/esqueci-senha" style="color:#007bff;text-decoration:underline;">Recuperar senha</a>';
+                        emailInput.style.borderColor = 'red';
+                        emailExiste = true;
+                        emailInput.setAttribute('data-existe', '1');
+                        // Mostra modal imediatamente
+                        modal.style.display = 'flex';
+                    } else {
+                        msgDiv.textContent = '';
+                        emailInput.style.borderColor = '';
+                        emailExiste = false;
+                        emailInput.removeAttribute('data-existe');
+                        modal.style.display = 'none';
+                    }
+                });
+            } else {
+                msgDiv.textContent = 'Digite um e-mail válido.';
+                emailInput.style.borderColor = 'red';
+                emailExiste = false;
+                emailInput.removeAttribute('data-existe');
+                modal.style.display = 'none';
+            }
+        });
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const email = emailInput.value.trim();
+            if (!email || !email.includes('@')) {
+                msgDiv.textContent = 'Digite um e-mail válido.';
+                emailInput.style.borderColor = 'red';
+                e.preventDefault();
+                return false;
+            }
+            if (emailInput.getAttribute('data-existe') === '1' || emailExiste) {
+                msgDiv.innerHTML = 'E-mail já cadastrado! <a href="/esqueci-senha" style="color:#007bff;text-decoration:underline;">Recuperar senha</a>';
+                emailInput.style.borderColor = 'red';
+                modal.style.display = 'flex';
+                e.preventDefault();
+                return false;
+            }
+            // Previne submit duplo
+            this.querySelector('button[type="submit"]').disabled = true;
+            return true;
+        });
+        function fecharModalEmailExiste() {
+            modal.style.display = 'none';
+            emailInput.value = '';
+            emailInput.style.borderColor = '';
+            msgDiv.textContent = '';
+            emailInput.removeAttribute('data-existe');
+            emailExiste = false;
+            emailInput.focus();
+        }
+    </script>
+</body>
+</html>

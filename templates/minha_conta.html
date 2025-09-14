@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha Conta</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .user-container { max-width: 800px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .user-header { display: flex; align-items: center; gap: 24px; margin-bottom: 32px; }
+        .user-header img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid #007bff; }
+        .user-header .user-info { font-size: 18px; }
+        .user-header .user-info h2 { margin: 0 0 8px 0; }
+        .user-header .user-info p { margin: 0; color: #555; }
+        .user-actions { margin-bottom: 32px; }
+        .user-actions a { margin-right: 16px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #f4f4f4; }
+        .cupom-ativo { color: green; font-weight: bold; }
+        .cupom-inativo { color: #b71c1c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="user-container social-profile">
+        <div class="profile-header">
+            <div class="profile-pic-wrap" style="width:100px;height:100px;display:flex;align-items:center;justify-content:center;background:#f4f4f4;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.07);position:relative;">
+                <img src="{{ usuario['foto'] or '/static/uploads/default-user.png' }}" alt="Foto do usuário" class="profile-pic" style="width:90px;height:90px;object-fit:cover;border-radius:8px;">
+                <a href="/usuario/editar?campo=foto" class="edit-photo" title="Editar foto" style="position:absolute;top:6px;right:6px;background:transparent;border:none;box-shadow:none;"><span>&#9998;</span></a>
+            </div>
+            <div class="profile-info">
+                <div class="profile-field">
+                    <span class="field-label">Nome:</span>
+                    <span class="field-value">{{ usuario['nome'] }}</span>
+                    <a href="/usuario/editar?campo=nome" class="edit-field" title="Editar nome"><span>&#9998;</span></a>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Data de Nascimento:</span>
+                    <span class="field-value">{{ usuario['data_nascimento'] }}</span>
+                    <a href="/usuario/editar?campo=data_nascimento" class="edit-field" title="Editar data de nascimento"><span>&#9998;</span></a>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Telefone:</span>
+                    <span class="field-value">{{ usuario['telefone'] }}</span>
+                    <a href="/usuario/editar?campo=telefone" class="edit-field" title="Editar telefone"><span>&#9998;</span></a>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Cidade:</span>
+                    <span class="field-value">{{ usuario['cidade'] }}</span>
+                    <a href="/usuario/editar?campo=cidade" class="edit-field" title="Editar cidade"><span>&#9998;</span></a>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Estado:</span>
+                    <span class="field-value">{{ usuario['estado'] }}</span>
+                    <a href="/usuario/editar?campo=estado" class="edit-field" title="Editar estado"><span>&#9998;</span></a>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">País:</span>
+                    <span class="field-value">{{ usuario['pais'] }}</span>
+                    <a href="/usuario/editar?campo=pais" class="edit-field" title="Editar país"><span>&#9998;</span></a>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">E-mail:</span>
+                    <span class="field-value">{{ usuario['email'] }}</span>
+                    <span class="edit-field" style="opacity:0.4;cursor:not-allowed;" title="E-mail não pode ser alterado"><span>&#9998;</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="profile-actions">
+            <a href="/" class="botao botao-compras"><i class="fa fa-shopping-bag"></i> Ir às Compras</a>
+            {% if session.get('tipo_usuario') == 'empresa' or session.get('nome_empresa') %}
+                <a href="/empresa" class="botao botao-empresa"><i class="fa fa-building"></i> Minha Empresa</a>
+            {% endif %}
+            <a href="/logout" class="botao botao-sair"><i class="fa fa-sign-out-alt"></i> Sair</a>
+        </div>
+        <h3>Meus Cupons</h3>
+        <table>
+            <tr>
+                <th>Código</th>
+                <th>Oferta</th>
+                <th>Status</th>
+                <th>Data da Compra</th>
+            </tr>
+            {% for cupom in cupons %}
+            <tr>
+                <td>{{ cupom['codigo'] }}</td>
+                <td>{{ cupom['oferta'] }}</td>
+                <td class="{{ 'cupom-ativo' if cupom['ativo'] else 'cupom-inativo' }}">{{ 'Ativo' if cupom['ativo'] else 'Usado' }}</td>
+                <td>{{ cupom['data_compra'] }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" style="text-align:center;">Nenhum cupom encontrado.</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <style>
+        body { background: linear-gradient(135deg, #f5f7fa 0%, #ffe066 100%); min-height: 100vh; }
+        .social-profile { box-shadow: 0 4px 24px rgba(0,0,0,0.10); border-radius: 16px; background: #fff; }
+        .profile-header { display: flex; align-items: center; gap: 32px; margin-bottom: 32px; }
+        .profile-pic-wrap { position: relative; }
+        .profile-pic { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #338a53; }
+        .edit-photo { position: absolute; bottom: 8px; right: 8px; background: #fff; border-radius: 50%; border: 1px solid #338a53; padding: 6px; color: #338a53; font-size: 18px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        .profile-info { flex: 1; }
+        .profile-field { display: flex; align-items: center; margin-bottom: 18px; font-size: 1.1em; }
+        .field-label { font-weight: 600; color: #338a53; min-width: 80px; }
+        .field-value { margin: 0 10px 0 0; color: #222; }
+        .edit-field { color: #338a53; margin-left: 8px; font-size: 1.1em; text-decoration: none; transition: color 0.2s; }
+        .edit-field:hover, .edit-photo:hover { color: #1b5e20; }
+        .profile-actions { margin-bottom: 32px; display: flex; gap: 18px; }
+        .botao-compras { background: #338a53; color: #fff; font-weight: bold; border-radius: 6px; padding: 10px 24px; font-size: 1.1em; text-decoration: none; transition: background 0.2s; display: flex; align-items: center; gap: 8px; }
+        .botao-compras:hover { background: #226b3a; }
+        .botao-empresa { background: #ffe066; color: #222; font-weight: bold; border-radius: 6px; padding: 10px 24px; font-size: 1.1em; text-decoration: none; box-shadow: 0 2px 8px #0001; border: 1px solid #ffe066; display: flex; align-items: center; gap: 8px; transition: background 0.2s, color 0.2s; }
+        .botao-empresa:hover { background: #fffbe6; color: #bfa600; border-color: #bfa600; }
+        .botao-sair { background: #b71c1c; color: #fff; border-radius: 6px; padding: 10px 24px; font-size: 1.1em; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .botao-sair:hover { background: #7f1818; }
+    </style>
+</body>
+</html>

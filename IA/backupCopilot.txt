@@ -1,0 +1,160 @@
+Aqui está o resumo completo e organizado de tudo que fizemos até agora no projeto Passaporte do Pinhão. Tu pode copiar e colar isso direto no bloco de notas — se der qualquer B.O., é só voltar aqui e seguir o roteiro.
+
+✅ RESUMO DO PROJETO: PASSAPORTE DO PINHÃO
+🧠 Objetivo
+Criar um site regional para venda de cupons gastronômicos em Lages e região, conectando turistas e moradores com restaurantes parceiros que valorizam o pinhão e a cultura serrana.
+
+🗂️ Estrutura de Pastas
+Código
+passaporte-do-pinhao/
+├── main.py
+├── static/
+│   └── style.css
+├── templates/
+│   └── index.html
+🐍 Python + Flask
+Instalado Python 3.13 corretamente
+
+Adicionado ao PATH do Windows
+
+Instalado Flask com pip install flask
+
+Criado main.py com rota principal renderizando index.html
+
+🖼️ Página Inicial (index.html)
+Cabeçalho com logo, campo de busca e menu de navegação
+
+Banner com chamada principal: “Saboreie Lages com Desconto”
+
+Grid de ofertas em destaque com imagem, nome, descrição, preço e botão “✅ Combo Cupom”
+
+Seção “Como Funciona” com 3 passos simples
+
+Rodapé com contato e direitos autorais
+
+Menu de categorias fixo abaixo do cabeçalho com botões:
+
+Destaques
+
+Novidades
+
+Mais vendidos
+
+Cidades: Lages, Correia Pinto, São Joaquim, Urubici
+
+Botão “Ofertas perto de mim 📍” com geolocalização
+
+🎨 Estilo Visual (style.css)
+Cores: verde escuro (#2e3d2e), verde musgo (#6b8e23), fundo claro (#fdfcf7)
+
+Layout responsivo com @media (max-width: 768px)
+
+Botões arredondados, fontes limpas, espaçamento adequado
+
+Menu horizontal com botões de categoria que não mudam de estado ao clicar
+
+📱 Responsividade
+Adicionada meta tag no <head>:
+
+html
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+Layout adaptado para celular e tablet
+
+Grid de ofertas vira lista vertical no mobile
+
+Campo de busca e menu reorganizados para telas pequenas
+
+📍 Geolocalização
+Função em JavaScript que pega latitude e longitude do usuário ao clicar em “Ofertas perto de mim”
+
+Pronto para integrar com backend Flask futuramente
+
+🔜 Próximos Passos
+Criar página de detalhes da oferta com botão de compra e regulamento
+
+Criar sistema de cadastro de restaurantes parceiros
+
+Criar sistema de compra de cupons com pagamento e geração de código
+
+Criar área do usuário com login, histórico de cupons e avaliações
+
+Publicar o site online com domínio e hospedagem
+
+
+
+
+
+Estrutura do Projeto
+Código
+passaporte-do-pinhao/
+├── main.py
+├── templates/
+│   ├── index.html
+│   ├── cadastro_empresa.html
+│   ├── login.html
+├── static/
+│   └── style.css  ← (ainda não estilizado)
+├── database/
+│   └── banco.db  ← criado automaticamente
+🧠 main.py — Lógica do servidor
+Cria o banco banco.db com a tabela empresas
+
+Rota / → página inicial com botões
+
+Rota /cadastro → formulário para cadastrar empresa
+
+Rota /login → autenticação por email e senha
+
+Rota /empresas → lista todas as empresas cadastradas
+
+O servidor roda com python main.py e responde em http://127.0.0.1:5000/
+
+🎨 index.html — Página inicial
+Título e navegação com botões:
+
+Cadastrar Empresa
+
+Login
+
+Ver Empresas
+
+Seção de boas-vindas
+
+Div reservada para futuras ofertas
+
+📝 cadastro_empresa.html — Formulário de cadastro
+Campos:
+
+nome, email, senha, empresa, documento, telefone, foto
+
+🔐 login.html — Formulário de login
+Campos:
+
+email, senha
+
+Se o login falhar, redireciona para /cadastro
+
+🧾 Banco de dados: banco.db
+Tabela: empresas
+
+sql
+CREATE TABLE empresas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL,
+    senha TEXT NOT NULL,
+    empresa TEXT NOT NULL,
+    documento TEXT NOT NULL,
+    telefone TEXT NOT NULL,
+    foto TEXT
+)
+✅ Status atual
+Site funcional com rotas básicas
+
+Banco conectado e recebendo dados
+
+Página inicial acessível
+
+Estilo ainda simples (pronto pra receber CSS)
+
+Pronto pra adicionar cadastro de ofertas, painel da empresa, logout, etc.

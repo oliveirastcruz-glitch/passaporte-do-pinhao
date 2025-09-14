@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de Empresa</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .cadastro-container {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+        }
+        .cadastro-container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .cadastro-container button {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #fff;
+        }
+        .cadastro-container button.comprar {
+            background-color: #28a745;
+        }
+        .cadastro-container button.comprar:hover {
+            background-color: #218838;
+        }
+        .cadastro-container button.vender {
+            background-color: #dc3545;
+        }
+        .cadastro-container button.vender:hover {
+            background-color: #c82333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: bold;
+        }
+        .form-group-inline {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .form-group-inline > div {
+            flex: 1;
+        }
+        .form-group-inline select,
+        .form-group-inline input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="tel"] {
+            border: 2px solid #007BFF;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="tel"]:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 91, 179, 0.5);
+        }
+        .password-container {
+            position: relative;
+        }
+        .password-container input {
+            width: 100%;
+        }
+        .password-container .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .password-strength {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        .tipo-usuario-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .tipo-usuario {
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 20px 0 0;
+        }
+        .tipo-usuario.comprador {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .tipo-usuario.vendedor {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .tipo-usuario.active {
+            border-color: #000;
+        }
+        .termos-container {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .termos-container input {
+            margin-right: 5px;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+            display: block;
+            font-size: 14px;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="cadastro-container">
+        <h1>Que bom te ver por aqui!</h1>
+        <p>O que você quer fazer no site?</p>
+        <form action="/cadastro_etapa1" method="GET">
+            <button type="submit" name="acao" value="comprar" class="comprar">Quero Comprar</button>
+            <button type="submit" name="acao" value="vender" class="vender">Quero Vender</button>
+        </form>
+    </div>
+
+    <script>
+        function checkPasswordStrength(password) {
+            const strengthText = document.getElementById('password-strength-text');
+            const strengthBar = document.getElementById('password-strength-bar');
+            let strength = 0;
+
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            const strengthLevels = ['Muito Fraca', 'Fraca', 'Média', 'Forte', 'Muito Forte'];
+            strengthText.textContent = strengthLevels[strength - 1] || 'Muito Fraca';
+            strengthBar.value = strength;
+        }
+
+        function togglePasswordVisibility(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function selecionarTipoUsuario(tipo) {
+            document.getElementById('tipo_usuario').value = tipo;
+            document.getElementById('comprador').classList.remove('active');
+            document.getElementById('vendedor').classList.remove('active');
+            document.getElementById(tipo).classList.add('active');
+
+            const paisSelect = document.getElementById('pais');
+            const nomeEmpresaContainer = document.getElementById('nome-empresa-container');
+            const tipoDocumento = document.getElementById('tipo_documento');
+            const documentoInput = document.getElementById('documento');
+            const documentoTipo = document.getElementById('documento-tipo');
+
+            if (tipo === 'vendedor') {
+                nomeEmpresaContainer.style.display = 'block';
+                nomeEmpresaContainer.querySelector('input').disabled = false;
+                tipoDocumento.value = 'cnpj';
+                documentoInput.placeholder = 'Digite seu CNPJ';
+                documentoTipo.textContent = 'Digite um CNPJ válido';
+                documentoInput.pattern = '\\d{14}';
+                paisSelect.innerHTML = '<option value="Brasil">Brasil</option>';
+            } else {
+                nomeEmpresaContainer.style.display = 'none';
+                nomeEmpresaContainer.querySelector('input').disabled = true;
+                tipoDocumento.value = 'cpf';
+                documentoInput.placeholder = 'Digite seu CPF';
+                documentoTipo.textContent = 'Digite um CPF válido';
+                documentoInput.pattern = '\\d{11}';
+                paisSelect.innerHTML = `
+                    <option value="">Selecione um país</option>
+                    <option value="Afeganistão">Afeganistão</option>
+                    <option value="África do Sul">África do Sul</option>
+                    <option value="Alemanha">Alemanha</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Austrália">Austrália</option>
+                    <option value="Canadá">Canadá</option>
+                    <option value="China">China</option>
+                    <option value="Espanha">Espanha</option>
+                    <option value="Estados Unidos">Estados Unidos</option>
+                    <option value="França">França</option>
+                    <option value="Índia">Índia</option>
+                    <option value="Itália">Itália</option>
+                    <option value="Japão">Japão</option>
+                    <option value="México">México</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="Reino Unido">Reino Unido</option>
+                    <option value="Rússia">Rússia</option>
+                    <option value="Suíça">Suíça</option>
+                    <option value="Uruguai">Uruguai`;
+            }
+        }
+
+        const tipoUsuario = document.getElementById('tipo_usuario');
+        const nomeEmpresaContainer = document.getElementById('nome-empresa-container');
+        const fotoContainer = document.getElementById('foto-container');
+        const naoAceitarTermos = document.getElementById('nao_aceitar_termos');
+
+        tipoUsuario.addEventListener('change', () => {
+            if (tipoUsuario.value === 'vendedor') {
+                nomeEmpresaContainer.style.display = 'block';
+                nomeEmpresaContainer.querySelector('input').disabled = false;
+                fotoContainer.querySelector('label').textContent = 'Logo da Empresa:';
+            } else {
+                nomeEmpresaContainer.style.display = 'none';
+                nomeEmpresaContainer.querySelector('input').disabled = true;
+                fotoContainer.querySelector('label').textContent = 'Foto de Perfil:';
+            }
+        });
+
+        naoAceitarTermos.addEventListener('change', () => {
+            if (naoAceitarTermos.checked) {
+                const confirmacao = confirm('Tem certeza que não aceita os termos?');
+                if (confirmacao) {
+                    window.location.href = '/';
+                } else {
+                    naoAceitarTermos.checked = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

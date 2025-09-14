@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Passaporte do Pinhão</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <header class="header-principal">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icone"><i class="fa-solid fa-tree"></i></span>
+                <span class="logo-texto">Passaporte do Pinhão</span>
+            </div>
+            <form action="{{ url_for('buscar') }}" method="GET" class="busca-form">
+                <input type="text" name="q" placeholder="Buscar ofertas...">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    {% if not session.get('usuario') %}
+                        <li><a href="/cadastro">Cadastrar</a></li>
+                        <li><a href="/login">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% if session.get('usuario') %}
+                <div class="usuario-logado donatella-header">
+                    <a href="/empresa" class="donatella-nome"><i class="fa fa-user"></i> Donatella</a>
+                    <a href="/logout" class="logoff-btn">Logoff</a>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <section class="categorias-barra">
+        <button class="categoria-btn"><i class="fa fa-fire"></i> Novidades</button>
+        <button class="categoria-btn"><i class="fa fa-star"></i> Mais Vendidas</button>
+        <button class="categoria-btn"><i class="fa fa-utensils"></i> Gastronomia</button>
+        <button class="categoria-btn"><i class="fa fa-mountain"></i> Serra Catarinense</button>
+        <button class="categoria-btn"><i class="fa fa-leaf"></i> Natureza</button>
+        <button class="categoria-btn"><i class="fa fa-gift"></i> Promoções</button>
+        <!-- Adicione mais categorias se quiser -->
+    </section>
+
+    <section class="destaque-regiao">
+        <h2>Serra Catarinense - Ofertas Especiais</h2>
+        <p>Descubra experiências, gastronomia e lazer com descontos exclusivos na Serra Catarinense!</p>
+    </section>
+
+    <main>
+        <section class="ofertas">
+            <div class="grid-ofertas">
+                {% if ofertas %}
+                    {% for oferta in ofertas %}
+                        <div class="card-oferta">
+  <div class="card-topo">
+    <img src="{{ oferta[4] or '/static/imagens/sem-foto.jpg' }}" alt="Imagem da oferta" class="img-oferta">
+    {% if oferta[6] %} <!-- exclusivo -->
+      <span class="selo-exclusivo">Exclusivo</span>
+    {% endif %}
+    {% if oferta[7] and oferta[7] > oferta[3] %}
+      <span class="desconto-circulo">
+        {{ '%.0f'|format(((oferta[7] - oferta[3]) / oferta[7]) * 100) }}
+      </span>
+    {% endif %}
+  </div>
+  <div class="card-info">
+    <h3>{{ oferta[1] }}</h3>
+    <p class="descricao">{{ oferta[2] }}</p>
+    <div class="preco-area">
+      {% if oferta[7] and oferta[7] > oferta[3] %}
+        <span class="valor-original">De R$ {{ '%.2f'|format(oferta[7]) }}</span>
+      {% endif %}
+      <span class="preco">Por R$ {{ '%.2f'|format(oferta[3]) }}</span>
+    </div>
+    <p class="detalhe-preco">Por pessoa</p>
+    <a href="{{ url_for('venda_oferta', oferta_id=oferta[0]) }}" class="botao-comprar">COMPRAR</a>
+  </div>
+</div>
+                    {% endfor %}
+                {% else %}
+                    <p>Nenhuma oferta cadastrada ainda.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Passaporte do Pinhão. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

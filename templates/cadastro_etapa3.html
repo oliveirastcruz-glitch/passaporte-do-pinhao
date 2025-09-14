@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .cadastro-topo {
+            background: #fff;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 480px;
+            margin: 40px auto 0 auto;
+            padding: 32px 32px 16px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .foto-perfil {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #007bff;
+            margin-bottom: 18px;
+        }
+        .dados-laterais {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .dado-item {
+            flex: 1 1 45%;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 10px 12px 10px 16px;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .dado-label {
+            font-size: 13px;
+            color: #888;
+            margin-right: 6px;
+            min-width: 60px;
+        }
+        .dado-valor {
+            font-size: 15px;
+            color: #222;
+            flex: 1;
+        }
+        .edit-ico {
+            width: 18px;
+            height: 18px;
+            margin-left: 6px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .edit-ico:hover {
+            opacity: 1;
+        }
+        .cadastro-form {
+            background: #fff;
+            max-width: 480px;
+            margin: 0 auto 40px auto;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 24px 32px 32px 32px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            width: 100%;
+        }
+        .form-group label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .input-eye {
+            position: relative;
+            width: 100%;
+        }
+        .input-eye input {
+            width: 100%;
+            padding-right: 38px;
+        }
+        .eye-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            opacity: 0.7;
+        }
+        .termos {
+            margin-top: 18px;
+            margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .termos label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .termos a {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 18px;
+            width: 100%;
+        }
+        .buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+        }
+        .empresa-accordion { width:100%; margin-top:18px; }
+        .accordion-btn {
+            width:100%;
+            background:#f1f1f1;
+            border:none;
+            border-radius:6px;
+            padding:10px 16px;
+            font-size:16px;
+            font-weight:bold;
+            color:#333;
+            text-align:left;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            margin-bottom:0;
+        }
+        .empresa-content {
+            background:#f8f9fa;
+            border-radius:0 0 6px 6px;
+            margin-top:0;
+            padding:14px 12px 8px 12px;
+            animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn {
+            from { opacity:0; }
+            to { opacity:1; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div class="cadastro-topo">
+        <div style="position:relative;display:inline-block;">
+            <img id="foto-perfil" src="{{ session['foto'] and url_for('static', filename='uploads/' + session['foto']) or 'https://ui-avatars.com/api/?name=' + (session['nome'] or 'Usuário') }}" class="foto-perfil" alt="Foto de perfil">
+            <form id="form-foto" action="/upload_foto" method="POST" enctype="multipart/form-data" style="display:none;">
+                <input type="file" id="input-foto" name="foto" accept="image/*" onchange="enviarFoto()">
+            </form>
+            <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar foto" style="position:absolute;bottom:8px;right:8px;background:#fff;border-radius:50%;padding:2px;box-shadow:0 1px 4px #0001;z-index:2;cursor:pointer;" onclick="document.getElementById('input-foto').click()">
+        </div>
+        <div class="dados-laterais">
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Nome:</span>
+                <span class="dado-valor" id="nome-text" style="flex:1;">{{ session['nome'] or '' }}</span>
+                <input type="text" id="nome-input" value="{{ session['nome'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampo('nome')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Sobrenome:</span>
+                <span class="dado-valor" id="sobrenome-text" style="flex:1;">{{ session['sobrenome'] or '' }}</span>
+                <input type="text" id="sobrenome-input" value="{{ session['sobrenome'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampo('sobrenome')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">E-mail:</span>
+                <span class="dado-valor" id="email-text" style="flex:1;">{{ session['email'] or '' }}</span>
+                <input type="email" id="email-input" value="{{ session['email'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;filter:invert(67%) sepia(98%) saturate(749%) hue-rotate(60deg) brightness(1.2);cursor:pointer;" onclick="window.location.href='/cadastro_etapa1'">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Sexo:</span>
+                <span class="dado-valor" id="sexo-text" style="flex:1;">{{ session['sexo'] or '' }}</span>
+                <select id="sexo-input" style="display:none;flex:1;" onchange="atualizarCampoSelect('sexo')">
+                    <option value="Masculino" {% if sexo=='Masculino' %}selected{% endif %}>Masculino</option>
+                    <option value="Feminino" {% if sexo=='Feminino' %}selected{% endif %}>Feminino</option>
+                    <option value="Não informar" {% if sexo=='Não informar' %}selected{% endif %}>Não informar</option>
+                </select>
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampoSelect('sexo')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Telefone:</span>
+                <span class="dado-valor" id="telefone-text" style="flex:1;">{{ session['telefone'] or '' }}</span>
+                <input type="text" id="telefone-input" value="{{ session['telefone'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampo('telefone')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Nascimento:</span>
+                <span class="dado-valor" id="data_nascimento-text" style="flex:1;">{{ session['data_nascimento'] or '' }}</span>
+                <input type="text" id="data_nascimento-input" value="{{ session['data_nascimento'] or '' }}" style="display:none;flex:1;" placeholder="dd/mm/aaaa" readonly>
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampoData('data_nascimento')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Cidade:</span>
+                <span class="dado-valor" id="cidade-text" style="flex:1;">{{ session['cidade'] or '' }}</span>
+                <input type="text" id="cidade-input" value="{{ session['cidade'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampo('cidade')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">Estado:</span>
+                <span class="dado-valor" id="estado-text" style="flex:1;">{{ session['estado'] or '' }}</span>
+                <input type="text" id="estado-input" value="{{ session['estado'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampo('estado')">
+            </div>
+            <div class="dado-item" style="position:relative;display:flex;align-items:center;">
+                <span class="dado-label">País:</span>
+                <span class="dado-valor" id="pais-text" style="flex:1;">{{ session['pais'] or '' }}</span>
+                <input type="text" id="pais-input" value="{{ session['pais'] or '' }}" style="display:none;flex:1;">
+                <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;" onclick="editarCampo('pais')">
+            </div>
+        </div>
+        {% if session['acao']=='vender' %}
+            <div class="empresa-accordion">
+                <button type="button" class="accordion-btn" onclick="toggleEmpresa()">
+                    Dados da Empresa <span id="seta-empresa" style="display:inline-block;transition:transform 0.2s;">&#9660;</span>
+                </button>
+                <div id="empresa-content" class="empresa-content" style="display:none;">
+                    <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;justify-content:center;">
+                        <img id="logo-preview" src="{{ session['logo_empresa'] and url_for('static', filename='uploads/' + session['logo_empresa']) or 'https://ui-avatars.com/api/?name=Empresa' }}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #007bff;">
+                        <label for="logo_empresa" style="cursor:pointer;margin:0;">
+                            <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar logo">
+                            <input type="file" id="logo_empresa" name="logo_empresa" accept="image/*" style="display:none;">
+                        </label>
+                    </div>
+                    <div class="dado-item"><span class="dado-label">Razão Social:</span> <span class="dado-valor" id="rsocial-text">{{ session['razao_social'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('rsocial')"></div>
+                    <input type="text" id="rsocial-input" value="{{ session['razao_social'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Nome Fantasia:</span> <span class="dado-valor" id="fantasia-text">{{ session['nome_fantasia'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('fantasia')"></div>
+                    <input type="text" id="fantasia-input" value="{{ session['nome_fantasia'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">CNPJ:</span> <span class="dado-valor" id="cnpj-text">{{ session['cnpj'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('cnpj')"></div>
+                    <input type="text" id="cnpj-input" value="{{ session['cnpj'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Telefone:</span> <span class="dado-valor" id="tel-text">{{ session['telefone_empresa'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('tel')"></div>
+                    <input type="text" id="tel-input" value="{{ session['telefone_empresa'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Cidade:</span> <span class="dado-valor" id="cidadeemp-text">{{ session['cidade_empresa'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('cidadeemp')"></div>
+                    <input type="text" id="cidadeemp-input" value="{{ session['cidade_empresa'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Endereço:</span> <span class="dado-valor" id="end-text">{{ session['endereco'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('end')"></div>
+                    <input type="text" id="end-input" value="{{ session['endereco'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Número:</span> <span class="dado-valor" id="num-text">{{ session['numero'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('num')"></div>
+                    <input type="text" id="num-input" value="{{ session['numero'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Bairro:</span> <span class="dado-valor" id="bairro-text">{{ session['bairro'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('bairro')"></div>
+                    <input type="text" id="bairro-input" value="{{ session['bairro'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                    <div class="dado-item"><span class="dado-label">Ponto Ref.:</span> <span class="dado-valor" id="ponto-text">{{ session['ponto_referencia'] or '' }}</span> <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/edit.svg" class="edit-ico" title="Editar" onclick="editarEmpresaCampo('ponto')"></div>
+                    <input type="text" id="ponto-input" value="{{ session['ponto_referencia'] or '' }}" style="display:none;width:70%;margin:8px 0 0 70px;">
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="cadastro-form">
+        <form action="/finalizar_cadastro" method="POST">
+            <div class="form-group">
+                <label for="email2">Confirme seu e-mail:</label>
+                <input type="email" id="email2" name="email2" required placeholder="Digite novamente seu e-mail" value="{{ session['email'] or '' }}" oninput="verificaEmailIgual()">
+                <span id="email2-msg" style="font-size:13px;margin-top:2px;display:block;"></span>
+            </div>
+            <div class="form-group">
+                <label for="senha">Crie uma senha:</label>
+                <div class="input-eye">
+                    <input type="password" id="senha" name="senha" required autocomplete="new-password" oninput="checarForcaSenha(this.value);verificaSenhaIgual()">
+                    <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/eye.svg" id="eye-senha" class="eye-icon" alt="Mostrar senha" onclick="togglePassword('senha','eye-senha')">
+                </div>
+                <div id="senha-strength" style="height:6px;width:100%;border-radius:4px;margin-top:6px;background:#eee;overflow:hidden;">
+                    <div id="senha-strength-bar" style="height:100%;width:0%;background:#ff4d4d;transition:width 0.3s,background 0.3s;"></div>
+                </div>
+                <div id="senha-strength-text" style="font-size:13px;color:#888;margin-top:2px;"></div>
+            </div>
+            <div class="form-group">
+                <label for="senha2">Confirme sua senha:</label>
+                <div class="input-eye">
+                    <input type="password" id="senha2" name="senha2" required autocomplete="new-password" oninput="verificaSenhaIgual()">
+                    <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/eye.svg" id="eye-senha2" class="eye-icon" alt="Mostrar senha" onclick="togglePassword('senha2','eye-senha2')">
+                </div>
+                <span id="senha2-msg" style="font-size:13px;margin-top:2px;display:block;"></span>
+            </div>
+            <div class="termos">
+                <label><input type="radio" id="termo-sim" name="termos" value="sim" required> Aceito os <a href="/termos" target="_blank">termos de uso</a></label>
+                <label><input type="radio" id="termo-nao" name="termos" value="nao" required onclick="abrirModalTermos()"> Não aceito</label>
+            </div>
+            <div id="modal-termos" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:9999;align-items:center;justify-content:center;">
+                <div style="background:#fff;padding:32px 24px 24px 24px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.18);max-width:350px;width:90vw;text-align:center;position:relative;">
+                    <span style="position:absolute;top:8px;right:16px;font-size:22px;cursor:pointer;" onclick="fecharModalTermos()">&times;</span>
+                    <h2 style="color:#dc3545;margin-bottom:12px;">Tem certeza?</h2>
+                    <p>Para continuar, é necessário aceitar os termos de uso.<br>Se não aceitar, o cadastro será encerrado.<br><br>Ao clicar em <b>Aceitar termos</b>, você concorda automaticamente com os termos de uso.</p>
+                    <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;">
+                        <button onclick="window.location.href='/';" style="background:#6c757d;color:#fff;padding:8px 16px;border:none;border-radius:4px;">Encerrar cadastro</button>
+                        <button onclick="aceitarTermos()" style="background:#007bff;color:#fff;padding:8px 16px;border:none;border-radius:4px;">Aceitar termos</button>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Finalizar</button>
+            </div>
+        </form>
+    </div>
+    <div style="background:#ffeeba;color:#856404;padding:10px 16px;border-radius:6px;margin-bottom:18px;font-size:13px;">
+        <b>Debug session:</b><br>
+        {% for k, v in session.items() %}
+            <span style="font-family:monospace;">{{ k }}: {{ v }}</span><br>
+        {% endfor %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        function togglePassword(id, iconId) {
+            const senhaInput = document.getElementById(id);
+            const icon = document.getElementById(iconId);
+            if (senhaInput.type === 'password') {
+                senhaInput.type = 'text';
+                icon.src = 'https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/eye-off.svg';
+            } else {
+                senhaInput.type = 'password';
+                icon.src = 'https://cdn.jsdelivr.net/gh/feathericons/feather@4.28.0/icons/eye.svg';
+            }
+        }
+        function toggleEmpresa() {
+            var content = document.getElementById('empresa-content');
+            var seta = document.getElementById('seta-empresa');
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                seta.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                seta.style.transform = 'rotate(0deg)';
+            }
+        }
+        // Preview do logo da empresa
+        document.getElementById('logo_empresa')?.addEventListener('change', function(e) {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById('logo-preview').src = URL.createObjectURL(file);
+            }
+        });
+        // Função para editar campos da empresa
+        function editarEmpresaCampo(campo) {
+            const campos = {
+                'rsocial': ['rsocial-text','rsocial-input'],
+                'fantasia': ['fantasia-text','fantasia-input'],
+                'cnpj': ['cnpj-text','cnpj-input'],
+                'tel': ['tel-text','tel-input'],
+                'cidadeemp': ['cidadeemp-text','cidadeemp-input'],
+                'end': ['end-text','end-input'],
+                'num': ['num-text','num-input'],
+                'bairro': ['bairro-text','bairro-input'],
+                'ponto': ['ponto-text','ponto-input']
+            };
+            for (const key in campos) {
+                document.getElementById(campos[key][0]).style.display = (key===campo)?'none':'inline';
+                document.getElementById(campos[key][1]).style.display = (key===campo)?'inline':'none';
+            }
+            // Ao sair do input, volta para texto
+            document.getElementById(campos[campo][1]).onblur = function() {
+                document.getElementById(campos[campo][0]).textContent = this.value;
+                this.style.display = 'none';
+                document.getElementById(campos[campo][0]).style.display = 'inline';
+            };
+            document.getElementById(campos[campo][1]).focus();
+        }
+        // Edição inline dos campos pessoais
+        function editarCampo(campo) {
+            document.getElementById(campo+'-text').style.display = 'none';
+            document.getElementById(campo+'-input').style.display = 'inline';
+            document.getElementById(campo+'-input').focus();
+            document.getElementById(campo+'-input').onblur = function() {
+                document.getElementById(campo+'-text').textContent = this.value;
+                this.style.display = 'none';
+                document.getElementById(campo+'-text').style.display = 'inline';
+            };
+        }
+        function editarCampoSelect(campo) {
+            document.getElementById(campo+'-text').style.display = 'none';
+            document.getElementById(campo+'-input').style.display = 'inline';
+            document.getElementById(campo+'-input').focus();
+        }
+        function atualizarCampoSelect(campo) {
+            var select = document.getElementById(campo+'-input');
+            document.getElementById(campo+'-text').textContent = select.value;
+            select.style.display = 'none';
+            document.getElementById(campo+'-text').style.display = 'inline';
+        }
+        // Ativar calendário flatpickr para data de nascimento
+        function editarCampoData(campo) {
+            document.getElementById(campo+'-text').style.display = 'none';
+            var input = document.getElementById(campo+'-input');
+            input.style.display = 'inline';
+            flatpickr(input, {
+                dateFormat: 'd/m/Y',
+                maxDate: 'today',
+                defaultDate: input.value || undefined,
+                allowInput: true,
+                onClose: function(selectedDates, dateStr) {
+                    if(dateStr) {
+                        document.getElementById(campo+'-text').textContent = dateStr;
+                        input.value = dateStr;
+                    }
+                    input.style.display = 'none';
+                    document.getElementById(campo+'-text').style.display = 'inline';
+                }
+            });
+            input.focus();
+        }
+        // Upload real da foto de perfil
+        function enviarFoto() {
+            document.getElementById('form-foto').submit();
+        }
+        // Barra de força da senha
+        function checarForcaSenha(senha) {
+            let barra = document.getElementById('senha-strength-bar');
+            let texto = document.getElementById('senha-strength-text');
+            let forca = 0;
+            if (!senha) { barra.style.width = '0%'; barra.style.background = '#ff4d4d'; texto.textContent = ''; return; }
+            if (senha.length >= 8) forca++;
+            if (/[A-Z]/.test(senha)) forca++;
+            if (/[a-z]/.test(senha)) forca++;
+            if (/[0-9]/.test(senha)) forca++;
+            if (/[^A-Za-z0-9]/.test(senha)) forca++;
+            let cores = ['#ff4d4d','#ffb84d','#ffe14d','#a6e14d','#4dd964'];
+            let textos = ['Muito fraca','Fraca','Média','Forte','Muito forte'];
+            barra.style.width = (forca*20)+'%';
+            barra.style.background = cores[forca-1] || '#ff4d4d';
+            texto.textContent = textos[forca-1] || 'Muito fraca';
+        }
+        // Função para editar foto de perfil (exemplo: abrir input file)
+        function editarFotoPerfil() {
+            alert('Função de edição de foto ainda não implementada.');
+        }
+        // Verificação visual do e-mail de confirmação
+        function verificaEmailIgual() {
+            var email1 = {{ session['email']|tojson }};
+            var email2 = document.getElementById('email2').value;
+            var msg = document.getElementById('email2-msg');
+            if (!email2) { msg.textContent = ''; return; }
+            if (email1 === email2) {
+                msg.textContent = 'E-mails conferem!';
+                msg.style.color = '#32CD32';
+            } else {
+                msg.textContent = 'E-mails diferentes!';
+                msg.style.color = '#e74c3c';
+            }
+        }
+        // Verificação visual da senha de confirmação
+        function verificaSenhaIgual() {
+            var senha1 = document.getElementById('senha').value;
+            var senha2 = document.getElementById('senha2').value;
+            var msg = document.getElementById('senha2-msg');
+            var btn = document.querySelector('.buttons button[type="submit"]');
+            if (!senha2) { msg.textContent = ''; btn.disabled = false; return; }
+            if (senha1 === senha2) {
+                msg.textContent = 'Senhas conferem!';
+                msg.style.color = '#32CD32';
+                btn.disabled = false;
+            } else {
+                msg.textContent = 'Senhas diferentes!';
+                msg.style.color = '#e74c3c';
+                btn.disabled = true;
+            }
+        }
+        // Impedir submit se as senhas não conferirem
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var senha1 = document.getElementById('senha').value;
+            var senha2 = document.getElementById('senha2').value;
+            if (senha1 !== senha2) {
+                e.preventDefault();
+                document.getElementById('senha2-msg').textContent = 'Senhas diferentes!';
+                document.getElementById('senha2-msg').style.color = '#e74c3c';
+            }
+        });
+        function abrirModalTermos() {
+            document.getElementById('modal-termos').style.display = 'flex';
+        }
+        function fecharModalTermos() {
+            document.getElementById('modal-termos').style.display = 'none';
+            document.getElementById('termo-sim').checked = false;
+            document.getElementById('termo-nao').checked = false;
+        }
+        function aceitarTermos() {
+            var termoSim = document.getElementById('termo-sim');
+            if(termoSim) {
+                termoSim.checked = true;
+                fecharModalTermos();
+                // Pequeno delay para garantir que o modal feche antes do foco
+                setTimeout(function() {
+                    termoSim.focus();
+                    // Se quiser destacar visualmente, pode adicionar uma classe temporária
+                    termoSim.parentElement.classList.add('destaque-termo');
+                    setTimeout(function(){
+                        termoSim.parentElement.classList.remove('destaque-termo');
+                    }, 1200);
+                }, 100);
+            }
+        }
+        // CSS para destaque visual
+        var style = document.createElement('style');
+        style.innerHTML = `.destaque-termo { outline: 2px solid #007bff; border-radius: 50px; transition: outline 0.2s; }`;
+        document.head.appendChild(style);
+        // Validação de e-mail, senha e termos antes de enviar o formulário
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form');
+            if(form) {
+                form.addEventListener('submit', function(e) {
+                    var email1 = document.getElementById('email1');
+                    var email2 = document.getElementById('email2');
+                    var senha1 = document.getElementById('senha1');
+                    var senha2 = document.getElementById('senha2');
+                    var termoSim = document.getElementById('termo-sim');
+                    if(email1 && email2 && email1.value !== email2.value) {
+                        alert('Os e-mails não coincidem.');
+                        email2.focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                    if(senha1 && senha2 && senha1.value !== senha2.value) {
+                        alert('As senhas não coincidem.');
+                        senha2.focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                    if(!termoSim.checked) {
+                        alert('Você precisa aceitar os termos de uso para finalizar o cadastro.');
+                        termoSim.focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

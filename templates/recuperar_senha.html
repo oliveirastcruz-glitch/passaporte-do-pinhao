@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha</title>
+</head>
+<body>
+    <h1>Alterar Senha</h1>
+    <form method="POST">
+        <input type="text" name="codigo" placeholder="Digite o código recebido" required>
+        <input type="password" name="nova_senha" placeholder="Digite sua nova senha" required>
+        <button type="submit">Alterar Senha</button>
+    </form>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

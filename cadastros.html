@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Profissional</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        body {
+            background: #f7f7fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .cadastro-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 40px 32px 32px 32px;
+        }
+        h2 {
+            text-align: center;
+            color: #2d3a4b;
+            margin-bottom: 32px;
+        }
+        .form-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #2d3a4b;
+        }
+        input, select {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f9fafb;
+            transition: border 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: #4f8cff;
+            outline: none;
+        }
+        .form-actions {
+            text-align: center;
+            margin-top: 32px;
+        }
+        button {
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2d6be0;
+        }
+        .divider {
+            border-top: 1px solid #e5e7eb;
+            margin: 32px 0 24px 0;
+        }
+        .inline-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.98rem;
+            margin-top: 4px;
+        }
+        .preview-img {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 8px;
+            margin-top: 6px;
+        }
+        @media (max-width: 700px) {
+            .form-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="cadastro-container">
+    <h2>Cadastro Profissional</h2>
+    <form id="cadastroForm" method="POST" enctype="multipart/form-data" autocomplete="off">
+        <!-- Dados Pessoais -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="nome">Nome *</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="sobrenome">Sobrenome *</label>
+                <input type="text" id="sobrenome" name="sobrenome" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="sexo">Sexo *</label>
+                <select id="sexo" name="sexo" required>
+                    <option value="">Selecione</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="feminino">Feminino</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="data_nascimento">Data de Nascimento *</label>
+                <input type="text" id="data_nascimento" name="data_nascimento" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="telefone">Telefone *</label>
+                <input type="text" id="telefone" name="telefone" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" required onblur="verificarEmail()">
+                <div id="email-error" class="error-message"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email2">Confirme o E-mail *</label>
+                <input type="email" id="email2" name="email2" required oninput="validarEmailConfirmacao()">
+                <div id="email2-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha *</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <div class="form-group">
+                <label for="senha2">Confirme a Senha *</label>
+                <input type="password" id="senha2" name="senha2" required oninput="validarSenhaConfirmacao()">
+                <div id="senha2-error" class="error-message"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="tipo_documento">Tipo de Documento *</label>
+                <select id="tipo_documento" name="tipo_documento" required>
+                    <option value="">Selecione</option>
+                    <option value="cpf">CPF</option>
+                    <option value="cnpj">CNPJ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="documento">Número do Documento *</label>
+                <input type="text" id="documento" name="documento" required onblur="verificarDocumento()">
+                <div id="documento-error" class="error-message"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="cidade">Cidade *</label>
+                <input type="text" id="cidade" name="cidade" required>
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado *</label>
+                <input type="text" id="estado" name="estado" required>
+            </div>
+            <div class="form-group">
+                <label for="pais">País *</label>
+                <input type="text" id="pais" name="pais" required>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <!-- Dados da Empresa (se vendedor) -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="tipo_usuario">Quero me cadastrar como *</label>
+                <select id="tipo_usuario" name="tipo_usuario" required onchange="toggleEmpresaFields()">
+                    <option value="">Selecione</option>
+                    <option value="comprador">Comprador</option>
+                    <option value="vendedor">Vendedor</option>
+                </select>
+            </div>
+        </div>
+        <div id="empresa-fields" style="display:none;">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="empresa">Razão Social *</label>
+                    <input type="text" id="empresa" name="empresa">
+                </div>
+                <div class="form-group">
+                    <label for="nome_fantasia">Nome Fantasia</label>
+                    <input type="text" id="nome_fantasia" name="nome_fantasia">
+                </div>
+                <div class="form-group">
+                    <label for="cnpj">CNPJ *</label>
+                    <input type="text" id="cnpj" name="cnpj">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="telefone_empresa">Telefone da Empresa *</label>
+                    <input type="text" id="telefone_empresa" name="telefone_empresa">
+                </div>
+                <div class="form-group">
+                    <label for="cidade_empresa">Cidade da Empresa *</label>
+                    <input type="text" id="cidade_empresa" name="cidade_empresa">
+                </div>
+                <div class="form-group">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="endereco">Endereço</label>
+                    <input type="text" id="endereco" name="endereco">
+                </div>
+                <div class="form-group">
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" name="numero">
+                </div>
+                <div class="form-group">
+                    <label for="ponto_referencia">Ponto de Referência</label>
+                    <input type="text" id="ponto_referencia" name="ponto_referencia">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tipo_servico">Tipo de Serviço</label>
+                    <input type="text" id="tipo_servico" name="tipo_servico">
+                </div>
+                <div class="form-group">
+                    <label for="dias_funcionamento">Dias de Funcionamento</label>
+                    <input type="text" id="dias_funcionamento" name="dias_funcionamento">
+                </div>
+                <div class="form-group">
+                    <label for="pausa_meio_dia">Pausa Meio-dia</label>
+                    <input type="text" id="pausa_meio_dia" name="pausa_meio_dia">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="horario_abre">Horário de Abertura</label>
+                    <input type="text" id="horario_abre" name="horario_abre">
+                </div>
+                <div class="form-group">
+                    <label for="horario_fecha">Horário de Fechamento</label>
+                    <input type="text" id="horario_fecha" name="horario_fecha">
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="foto">Foto de Perfil</label>
+                <input type="file" id="foto" name="foto" accept="image/*" onchange="previewFoto(event)">
+                <img id="foto-preview" class="preview-img" style="display:none;" />
+            </div>
+            <div class="form-group inline-check">
+                <input type="checkbox" id="aceitar_termos" name="aceitar_termos" required>
+                <label for="aceitar_termos">Li e aceito os <a href="#" target="_blank">Termos de Uso</a> *</label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit">Finalizar Cadastro</button>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr('#data_nascimento', {dateFormat: 'Y-m-d'});
+    function toggleEmpresaFields() {
+        var tipo = document.getElementById('tipo_usuario').value;
+        document.getElementById('empresa-fields').style.display = (tipo === 'vendedor') ? 'block' : 'none';
+        // Torna campos obrigatórios se vendedor
+        var requiredFields = ['empresa','cnpj','telefone_empresa','cidade_empresa'];
+        requiredFields.forEach(function(id) {
+            document.getElementById(id).required = (tipo === 'vendedor');
+        });
+    }
+    function previewFoto(event) {
+        var output = document.getElementById('foto-preview');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.style.display = 'block';
+    }
+    function verificarEmail() {
+        var email = document.getElementById('email').value;
+        if (!email) return;
+        fetch('/verifica_existente', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'tipo=email&valor=' + encodeURIComponent(email)
+        })
+        .then(res => res.json())
+        .then(data => {
+            var erro = document.getElementById('email-error');
+            if (data.existe) {
+                erro.textContent = 'E-mail já cadastrado.';
+            } else {
+                erro.textContent = '';
+            }
+        });
+    }
+    function verificarDocumento() {
+        var tipo = document.getElementById('tipo_documento').value;
+        var doc = document.getElementById('documento').value;
+        if (!doc || !tipo) return;
+        fetch('/verifica_existente', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'tipo=' + tipo + '&valor=' + encodeURIComponent(doc)
+        })
+        .then(res => res.json())
+        .then(data => {
+            var erro = document.getElementById('documento-error');
+            if (data.existe) {
+                erro.textContent = (tipo === 'cpf' ? 'CPF' : 'CNPJ') + ' já cadastrado.';
+            } else {
+                erro.textContent = '';
+            }
+        });
+    }
+    function validarEmailConfirmacao() {
+        var email = document.getElementById('email').value;
+        var email2 = document.getElementById('email2').value;
+        var erro = document.getElementById('email2-error');
+        if (email2 && email !== email2) {
+            erro.textContent = 'Os e-mails não coincidem.';
+        } else {
+            erro.textContent = '';
+        }
+    }
+    function validarSenhaConfirmacao() {
+        var senha = document.getElementById('senha').value;
+        var senha2 = document.getElementById('senha2').value;
+        var erro = document.getElementById('senha2-error');
+        if (senha2 && senha !== senha2) {
+            erro.textContent = 'As senhas não coincidem.';
+        } else {
+            erro.textContent = '';
+        }
+    }
+    document.getElementById('cadastroForm').onsubmit = function(e) {
+        // Bloqueia submit se houver erro de e-mail ou senha
+        if (document.getElementById('email-error').textContent ||
+            document.getElementById('email2-error').textContent ||
+            document.getElementById('senha2-error').textContent ||
+            document.getElementById('documento-error').textContent) {
+            e.preventDefault();
+            alert('Corrija os erros antes de enviar o formulário.');
+        }
+    };
+</script>
+</body>
+</html>

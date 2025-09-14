@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda Barbearia - Modelo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffe066 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .agenda-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            padding: 40px 10px;
+            min-height: 100vh;
+        }
+        .agenda-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 28px 28px 28px;
+            width: 400px;
+            min-width: 320px;
+        }
+        .agenda-title {
+            font-size: 2em;
+            color: #338a53;
+            margin-bottom: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .horarios-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .horario {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f5f7fa;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 1.1em;
+            transition: background 0.2s;
+        }
+        .horario.ocupado {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .horario.livre {
+            background: #338a53;
+            color: #fff;
+        }
+        .horario .agendar-btn {
+            background: #ffe066;
+            color: #222;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .horario .agendar-btn:hover {
+            background: #ffd700;
+        }
+        .intervalo-box {
+            margin-bottom: 24px;
+        }
+        .intervalo-box label {
+            font-weight: bold;
+            color: #338a53;
+            margin-right: 10px;
+        }
+        .intervalo-box select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        .calendario-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 28px 24px 24px 24px;
+            min-width: 320px;
+        }
+        .calendario-title {
+            font-size: 1.3em;
+            color: #338a53;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .calendario {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+        .calendario-dia, .calendario-header {
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        .calendario-header {
+            font-weight: bold;
+            color: #338a53;
+            background: #f5f7fa;
+        }
+        .calendario-dia {
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .calendario-dia.hoje {
+            background: #ffe066;
+            color: #222;
+            font-weight: bold;
+        }
+        .calendario-dia.selecionado {
+            background: #338a53;
+            color: #fff;
+        }
+        .calendario-dia:hover {
+            background: #338a53;
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .agenda-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="agenda-container">
+        <div class="agenda-box">
+            <div class="agenda-title"><i class="fa fa-scissors"></i> Agenda da Barbearia</div>
+            <div class="intervalo-box">
+                <label for="intervalo">Intervalo de horário:</label>
+                <select id="intervalo">
+                    <option value="30">30 minutos</option>
+                    <option value="20">20 minutos</option>
+                    <option value="15">15 minutos</option>
+                    <option value="60">1 hora</option>
+                </select>
+            </div>
+            <div id="horarios" class="horarios-lista"></div>
+        </div>
+        <div class="calendario-box">
+            <div class="calendario-title">Escolha a data</div>
+            <div id="calendario"></div>
+        </div>
+    </div>
+    <script>
+        // Utilidades de data
+        function pad(n) { return n < 10 ? '0'+n : n; }
+        function formatDate(date) {
+            return date.getFullYear() + '-' + pad(date.getMonth()+1) + '-' + pad(date.getDate());
+        }
+        // Estado da agenda
+        let agendamentos = {};
+        let dataSelecionada = new Date();
+        let intervalo = 30;
+        // Gera horários do dia
+        function gerarHorarios(intervalo) {
+            let horarios = [];
+            let inicio = 8 * 60; // 8:00
+            let fim = 19 * 60; // 19:00
+            for(let min = inicio; min < fim; min += intervalo) {
+                let h = Math.floor(min/60);
+                let m = min%60;
+                horarios.push(pad(h)+":"+pad(m));
+            }
+            return horarios;
+        }
+        // Renderiza horários
+        function renderHorarios() {
+            const horariosDiv = document.getElementById('horarios');
+            horariosDiv.innerHTML = '';
+            let horarios = gerarHorarios(intervalo);
+            let dataKey = formatDate(dataSelecionada);
+            let ocupados = agendamentos[dataKey] || [];
+            horarios.forEach(horario => {
+                let ocupado = ocupados.includes(horario);
+                let div = document.createElement('div');
+                div.className = 'horario'+(ocupado ? ' ocupado' : ' livre');
+                div.innerHTML = `<span>${horario}</span>`;
+                if(!ocupado) {
+                    let btn = document.createElement('button');
+                    btn.className = 'agendar-btn';
+                    btn.innerText = 'Agendar';
+                    btn.onclick = () => {
+                        if(!agendamentos[dataKey]) agendamentos[dataKey] = [];
+                        agendamentos[dataKey].push(horario);
+                        renderHorarios();
+                    };
+                    div.appendChild(btn);
+                } else {
+                    div.innerHTML += '<span style="font-size:0.95em;opacity:0.7;">(Ocupado)</span>';
+                }
+                horariosDiv.appendChild(div);
+            });
+        }
+        // Renderiza calendário
+        function renderCalendario() {
+            const calDiv = document.getElementById('calendario');
+            calDiv.innerHTML = '';
+            let hoje = new Date();
+            let ano = dataSelecionada.getFullYear();
+            let mes = dataSelecionada.getMonth();
+            let primeiroDia = new Date(ano, mes, 1);
+            let ultimoDia = new Date(ano, mes+1, 0);
+            let diasSemana = ['D','S','T','Q','Q','S','S'];
+            // Cabeçalho
+            diasSemana.forEach(dia => {
+                let th = document.createElement('div');
+                th.className = 'calendario-header';
+                th.innerText = dia;
+                calDiv.appendChild(th);
+            });
+            // Espaço vazio antes do 1º dia
+            for(let i=0; i<primeiroDia.getDay(); i++) {
+                let empty = document.createElement('div');
+                calDiv.appendChild(empty);
+            }
+            // Dias do mês
+            for(let d=1; d<=ultimoDia.getDate(); d++) {
+                let dia = new Date(ano, mes, d);
+                let div = document.createElement('div');
+                div.className = 'calendario-dia';
+                if(formatDate(dia) === formatDate(hoje)) div.classList.add('hoje');
+                if(formatDate(dia) === formatDate(dataSelecionada)) div.classList.add('selecionado');
+                div.innerText = d;
+                div.onclick = () => {
+                    dataSelecionada = new Date(ano, mes, d);
+                    renderCalendario();
+                    renderHorarios();
+                };
+                calDiv.appendChild(div);
+            }
+        }
+        // Intervalo
+        document.getElementById('intervalo').addEventListener('change', function() {
+            intervalo = parseInt(this.value);
+            renderHorarios();
+        });
+        // Inicialização
+        renderCalendario();
+        renderHorarios();
+    </script>
+</body>
+</html>

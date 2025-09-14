@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Oferta</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .form-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+    .form-container input,
+    .form-container textarea,
+    .form-container button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+    .form-container input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+    }
+    .form-container button {
+      background-color: #338a53;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-container button:hover {
+      background-color: #246b45;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Cadastrar Nova Oferta</h1>
+    <form method="POST">
+      <label for="titulo">Título:</label>
+      <input type="text" name="titulo" required>
+
+      <label for="descricao">Descrição:</label>
+      <textarea name="descricao" required></textarea>
+
+      <label for="preco">Preço da oferta:</label>
+      <input type="number" name="preco" step="0.01" required>
+
+      <label for="valor_original">Valor original (antes do desconto):</label>
+      <input type="number" name="valor_original" step="0.01" required>
+
+      <label for="imagem">Imagem (nome do arquivo ou URL):</label>
+      <input type="text" name="imagem" required>
+
+      <label>
+        <input type="checkbox" name="exclusivo" value="1">
+        Oferta Exclusiva
+      </label>
+
+      <label for="parcelamento">Parcelamento (nº de vezes):</label>
+      <input type="number" name="parcelamento" min="1" max="12" value="1">
+
+      <label>
+        <input type="checkbox" name="sem_juros" value="1">
+        Parcelamento sem juros
+      </label>
+
+      <button type="submit">Salvar Oferta</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,945 @@
+.admin-main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 0 32px 0;
+    min-height: 80vh;
+}
+.admin-card {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 18px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px 32px 24px 32px;
+}
+/* Header Donatella e Logoff custom */
+.usuario-logado.donatella-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-left: 18px;
+}
+.donatella-nome {
+    color: #ffe066;
+    font-weight: bold;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-shadow: 1px 1px 2px #0002;
+}
+.donatella-nome .fa-user {
+    color: #ffe066;
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+.logoff-btn {
+    color: #fff;
+    background: #e74c3c;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 16px;
+    font-weight: bold;
+    font-size: 1em;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    margin-left: 8px;
+    box-shadow: 0 2px 8px #0001;
+}
+.logoff-btn:hover {
+    background: #c0392b;
+    color: #fff;
+}
+/* Página detalhada da empresa no admin */
+.admin-ver-empresa-page {
+    background: #f7faff;
+    min-height: 100vh;
+    padding: 30px 0;
+}
+.admin-table-detalhe {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0001;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+.admin-table-detalhe th, .admin-table-detalhe td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.admin-table-detalhe th {
+    background: #f5f7fa;
+    font-weight: 600;
+    color: #888;
+    text-align: right;
+    width: 180px;
+}
+.admin-table-detalhe tr:last-child th, .admin-table-detalhe tr:last-child td {
+    border-bottom: none;
+}
+/* Tabela de empresas compacta no admin */
+.admin-table-compact {
+    font-size: 13px;
+    width: 100%;
+    table-layout: fixed;
+}
+.admin-table-compact th, .admin-table-compact td {
+    padding: 4px 8px;
+    max-width: 160px;
+    overflow-x: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.admin-table-compact .admin-id {
+    width: 40px;
+    max-width: 40px;
+}
+.admin-table-compact .admin-nome {
+    max-width: 120px;
+}
+.admin-table-compact .admin-email {
+    max-width: 180px;
+}
+.btn-ver-empresa {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 12px;
+    background: #2d8cff;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.btn-ver-empresa:hover {
+    background: #1a5fb4;
+}
+/* Limitar largura das colunas nome e email na tabela de usuários do admin */
+.admin-nome, .admin-email {
+    max-width: 200px;
+    overflow-x: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.98em;
+}
+/* Limitar largura da coluna nome na tabela de usuários do admin */
+.admin-nome {
+    max-width: 200px;
+    overflow-x: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.98em;
+}
+/* --- ADMIN PAGE MODERN STYLE --- */
+.admin-page-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #ffe066 100%);
+}
+.admin-main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 0 32px 0;
+    min-height: 80vh;
+}
+/* removido bloco solto com propriedades inválidas */
+}
+.admin-card-wide {
+    max-width: 98vw;
+    width: 98vw;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    justify-content: stretch;
+    align-items: flex-start;
+}
+.admin-col {
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.admin-info h2 {
+    color: #338a53;
+    font-size: 1.7em;
+    margin-bottom: 6px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.admin-info p {
+    color: #555;
+    font-size: 1.1em;
+    margin-bottom: 0;
+}
+.admin-section h3 {
+    color: #338a53;
+    font-size: 1.2em;
+    margin-bottom: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.admin-table-wrap {
+    overflow-x: auto;
+    background: #f9f9fb;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(51,138,83,0.04);
+    padding: 8px 0 8px 0;
+}
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+    font-size: 1em;
+}
+.admin-table th, .admin-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+.admin-table th {
+    background: #f4f4f9;
+    color: #338a53;
+    font-weight: bold;
+}
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+.admin-status {
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.98em;
+}
+.admin-status.aprovado {
+    background: #e0f7e9;
+    color: #338a53;
+}
+.admin-status.pendente {
+    background: #fff3cd;
+    color: #b8860b;
+}
+.admin-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 2px 2px;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.admin-btn-aprovar {
+    background: #338a53;
+    color: #fff;
+}
+.admin-btn-aprovar:hover {
+    background: #246b45;
+}
+.admin-btn-reprovar {
+    background: #e74c3c;
+    color: #fff;
+}
+.admin-btn-reprovar:hover {
+    background: #b71c1c;
+}
+.admin-btn-add {
+    background: #ffe066;
+    color: #338a53;
+}
+.admin-btn-add:hover {
+    background: #fff176;
+    color: #b71c1c;
+}
+.admin-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.admin-list li {
+    background: #f4f4f9;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1em;
+}
+.admin-link {
+    color: #338a53;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.admin-link:hover {
+    color: #b71c1c;
+    text-decoration: underline;
+}
+.admin-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.admin-foto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #338a53;
+}
+.admin-hash {
+    max-width: 200px;
+    overflow-x: auto;
+    font-size: 0.92em;
+    color: #888;
+}
+@media (max-width: 1200px) {
+    .admin-card { max-width: 98vw; }
+}
+@media (max-width: 800px) {
+    .admin-card { padding: 12px 2vw; }
+    .admin-main { padding: 12px 0; }
+}
+@media (max-width: 600px) {
+    .admin-card { padding: 4px 0; }
+    .admin-section h3, .admin-info h2 { font-size: 1em; }
+}
+/* --- LOGIN PAGE MODERN STYLE --- */
+.login-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #338a53 0%, #ffe066 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(51,138,83,0.18);
+    padding: 38px 32px 28px 32px;
+    max-width: 370px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+    animation: loginFadeIn 0.7s;
+}
+
+@keyframes loginFadeIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 2.1em;
+    font-weight: bold;
+    color: #338a53;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+.login-logo i {
+    color: #ffe066;
+    font-size: 1.2em;
+}
+
+.login-card h2 {
+    color: #338a53;
+    font-size: 1.3em;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #f4f4f9;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border: 1px solid #e0e0e0;
+    position: relative;
+}
+.input-group label {
+    color: #338a53;
+    font-size: 1.1em;
+    margin-right: 8px;
+}
+.input-group input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1em;
+    flex: 1;
+    padding: 8px 0;
+    color: #222;
+}
+.toggle-senha {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+    font-size: 1.1em;
+}
+
+.btn-login {
+    background: linear-gradient(90deg, #338a53 60%, #ffe066 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 2px 8px rgba(51,138,83,0.08);
+    letter-spacing: 1px;
+}
+.btn-login:hover {
+    background: linear-gradient(90deg, #246b45 60%, #ffe066 100%);
+    color: #fffde7;
+}
+
+.login-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    gap: 10px;
+}
+.login-actions a {
+    color: #338a53;
+    font-size: 0.98em;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.login-actions a:hover {
+    color: #b71c1c;
+    text-decoration: underline;
+}
+.btn-cadastrar {
+    background: #ffe066;
+    color: #338a53 !important;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-weight: bold;
+    margin-left: 8px;
+    box-shadow: 0 1px 4px rgba(51,138,83,0.08);
+    transition: background 0.2s, color 0.2s;
+}
+.btn-cadastrar:hover {
+    background: #fff176;
+    color: #b71c1c !important;
+}
+.login-error {
+    color: #b71c1c;
+    font-size: 1em;
+    margin-top: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    margin: 0;
+}
+
+/* Cabeçalho */
+.header-principal {
+    background: #338a53;
+    color: #fff;
+    padding: 0;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    flex-wrap: wrap;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.7em;
+    font-weight: bold;
+    gap: 10px;
+}
+
+.logo-icone {
+    font-size: 1.2em;
+    color: #ffe066;
+}
+
+.logo-texto {
+    letter-spacing: 1px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+nav ul li a:hover {
+    background: #246b45;
+}
+
+.busca-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 24px;
+}
+
+.busca-form input {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: none;
+    width: 200px;
+    font-size: 1em;
+}
+
+.busca-form button {
+    background: #ffe066;
+    color: #338a53;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.busca-form button:hover {
+    background: #fff176;
+}
+
+.usuario-logado {
+    margin-left: 18px;
+    color: #ffe066;
+    font-size: 1em;
+    background: #338a53;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.categorias-barra {
+    background: #e9f5ec;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #cde3d1;
+    flex-wrap: wrap;
+}
+
+.categoria-btn {
+    background: #fff;
+    color: #338a53;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(51,138,83,0.06);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.categoria-btn:hover {
+    background: #338a53;
+    color: #fff;
+}
+
+.destaque-regiao {
+    background: #5bbd7e;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0 10px 0;
+    margin-bottom: 10px;
+}
+
+.destaque-regiao h2 {
+    margin-bottom: 6px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+/* GRID DE 4 CARDS */
+.grid-ofertas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    justify-content: center;
+    margin: 32px auto 0 auto;
+    max-width: 1300px;
+}
+
+@media (max-width: 1200px) {
+    .grid-ofertas {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .grid-ofertas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 600px) {
+    .grid-ofertas {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card-oferta {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(51,138,83,0.08);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+    position: relative;
+}
+
+.card-oferta:hover {
+    box-shadow: 0 6px 24px rgba(51,138,83,0.18);
+}
+
+.card-topo {
+    position: relative;
+}
+
+.img-oferta {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0; /* Remove margem para alinhar com o círculo */
+}
+
+/* Ajuste no estilo do círculo de desconto para o lado esquerdo */
+.desconto-circulo {
+    position: absolute;
+    top: 175px; /* Mantém a posição vertical ajustada */
+    left: 12px; /* Alterado para o lado esquerdo */
+    background: #b71c1c; /* Vermelho mais escuro */
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+/* Formatação do texto para exibir apenas dois números e o símbolo de porcentagem */
+.desconto-circulo::after {
+    content: '%';
+}
+
+.desconto-circulo span {
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+    overflow: hidden; /* Garante que apenas dois números sejam exibidos */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 2ch; /* Limita a largura para dois caracteres */
+}
+
+/* Garantir que apenas dois números sejam exibidos no conteúdo */
+.desconto-circulo span {
+    content: attr(data-desconto); /* Usa um atributo personalizado para limitar o valor */
+    filter: drop-shadow(0 0 1px #fff); /* Adicionado para melhor visibilidade */
+}
+
+.selo-exclusivo {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #4bb543;
+    color: #fff;
+    font-size: 0.95em;
+    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(51,138,83,0.12);
+    z-index: 2;
+}
+
+.valor-original {
+    color: #888;
+    font-size: 0.9em;
+    text-decoration: line-through;
+    display: block;
+}
+
+.preco {
+    color: #338a53;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.desconto {
+    color: #ff5722;
+    font-size: 1em;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.detalhe-preco {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 2px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.card-info {
+    padding: 18px 18px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+    min-height: 340px;
+    justify-content: flex-start;
+    padding: 0 18px 16px 18px;
+}
+
+.card-info h3 {
+    min-height: 60px;
+    max-height: 60px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 0 8px 0;
+}
+
+.descricao {
+    min-height: 60px;
+    max-height: 60px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.preco-area {
+    min-height: 60px;
+    max-height: 60px;
+    align-items: flex-start;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0 0 0;
+}
+
+.botao-comprar {
+    min-height: 44px;
+    max-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+}
+}
+
+.card-info h3 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0 0 30px 0;
+    color: #222;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.descricao {
+    font-size: 0.97em;
+    color: #444;
+    margin-bottom: 6px;
+    min-height: 48px;
+    max-height: 60px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.preco-area {
+    margin: 8px 0 0 0;
+    min-height: 60px;
+    max-height: 60px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.botao-comprar {
+    display: block;
+    background: #338a53;
+    color: #fff;
+    padding: 12px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: auto;
+    transition: background 0.2s;
+    letter-spacing: 1px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+}
+
+.local {
+    color: #338a53;
+    font-size: 0.98em;
+    font-weight: 600;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.card-info h3 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0 0 4px 0;
+    color: #222;
+}
+
+.descricao {
+    font-size: 0.97em;
+    color: #444;
+    margin-bottom: 6px;
+    min-height: 48px; /* Garante espaço fixo para a descrição */
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+}
+
+.preco-area {
+    margin: 8px 0 0 0;
+    min-height: 70px; /* Espaço maior para alinhar todos os campos de preço */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.botao-comprar {
+    display: block;
+    background: #338a53;
+    color: #fff;
+    padding: 12px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: auto;
+    transition: background 0.2s;
+    letter-spacing: 1px;
+}
+
+.botao-comprar:hover {
+    background: #246b45;
+}
+
+footer {
+    background: #338a53;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0;
+    margin-top: 40px;
+    font-size: 1em;
+}

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda Barbearia - Modelo Fiel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+            background: #e5e9f2;
+        }
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 220px;
+            background: #3887b8;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 18px;
+            z-index: 10;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            height: calc(100vh - 60px);
+        }
+        .sidebar-logo {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .sidebar-logo img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            background: #fff;
+        }
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+        .sidebar-menu li {
+            padding: 12px 24px;
+            font-size: 1.08em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background: #25608a;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            margin-left: 220px;
+        }
+        .header {
+            width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #3887b8;
+            color: #fff;
+            padding: 0 32px;
+            height: 60px;
+            box-sizing: border-box;
+        }
+        .header-left .menu-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.3em;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+        .app-title {
+            font-size: 1.25em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .header-center {
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .prof-select {
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1em;
+        }
+        .header-right i {
+            margin-left: 18px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .agenda-area {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 70px;
+            width: 100%;
+            min-width: 0;
+            gap: 24px;
+        }
+        .agenda-box {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 32px rgba(60,60,90,0.10);
+            padding: 0 0 0 0;
+            min-width: 700px;
+            max-width: 900px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .agenda-nav {
+            display: flex;
+            align-items: center;
+            background: #f0f1f6;
+            padding: 10px 32px;
+            gap: 12px;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 1px solid #e5e9f2;
+        }
+        .agenda-nav .nav-btn {
+            background: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(60,60,90,0.07);
+            transition: background 0.2s;
+        }
+        .agenda-nav .nav-btn.hoje {
+            background: #3887b8;
+            color: #fff;
+            font-weight: bold;
+        }
+        .agenda-nav .nav-btn.encaixe {
+            background: #4caf50;
+            color: #fff;
+            font-weight: bold;
+        }
+        .agenda-data {
+            margin-left: 18px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .agenda-view-btns {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+        }
+        .view-btn {
+            background: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .view-btn.active {
+            background: #3887b8;
+            color: #fff;
+        }
+        .agenda-table-area {
+            padding: 0 0 0 0;
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 0 0 12px 12px;
+        }
+        .agenda-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+        }
+        .agenda-table th, .agenda-table td {
+            text-align: left;
+            padding: 0;
+            border: none;
+        }
+        .agenda-table th {
+            background: #f0f1f6;
+            color: #3887b8;
+            font-weight: bold;
+            font-size: 1em;
+            height: 36px;
+            border-bottom: 1px solid #e5e9f2;
+        }
+        .agenda-table .hora {
+            width: 70px;
+            text-align: right;
+            color: #888;
+            font-size: 0.98em;
+            padding-right: 8px;
+            background: #f0f1f6;
+            border-right: 1px solid #e5e9f2;
+        }
+        .agenda-table .fechado-agrupado {
+            background: #222;
+            color: #fff;
+            border-bottom: 1px solid #444;
+            text-align: center;
+            font-size: 0.98em;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+        .agenda-table .agendamento {
+            background: #3887b8;
+            color: #fff;
+            border-radius: 6px;
+            margin: 2px 0;
+            font-weight: 500;
+            border-left: 6px solid #ffe066;
+            box-shadow: 0 1px 4px rgba(60,60,90,0.08);
+            padding: 6px 10px;
+        }
+        .agenda-table .livre {
+            background: #fff;
+            color: #bbb;
+        }
+        .agenda-table .linha {
+            border-bottom: 1px dashed #bfc9d1;
+        }
+        .agenda-table .almoço {
+            background: #222;
+            color: #fff;
+            border-bottom: 1px solid #444;
+            text-align: center;
+            font-style: italic;
+        }
+        .agenda-table td {
+            height: 40px;
+            vertical-align: middle;
+            position: relative;
+        }
+        .agenda-table .agendamento:not(:empty) {
+            margin: 2px 0;
+        }
+        .agenda-table .agendamento span {
+            font-size: 0.97em;
+            opacity: 0.95;
+        }
+        /* Sidebar direita (calendário) */
+        .sidebar-right {
+            width: 260px;
+            background: #f8fafc;
+            padding: 32px 10px 18px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            position: relative;
+        }
+        .calendario-box {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(60,60,90,0.08);
+            padding: 16px 10px 16px 10px;
+            width: 220px;
+            margin: 0 auto;
+        }
+        .calendario-title {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #3887b8;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .calendario-mes {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .cal-btn {
+            background: #e5e9f2;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .calendario {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+        .calendario-header {
+            font-weight: bold;
+            color: #3887b8;
+            background: #e5e9f2;
+            border-radius: 5px;
+            padding: 4px 0;
+            font-size: 0.98em;
+        }
+        .calendario-dia {
+            background: #fff;
+            color: #222;
+            border-radius: 5px;
+            text-align: center;
+            padding: 4px 0;
+            cursor: pointer;
+            font-size: 0.98em;
+            transition: background 0.2s, color 0.2s;
+        }
+        .calendario-dia.hoje {
+            background: #4caf50;
+            color: #fff;
+            font-weight: bold;
+        }
+        .calendario-dia.selecionada {
+            background: #3887b8;
+            color: #fff;
+        }
+        .calendario-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .calendario-btn {
+            background: #e5e9f2;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 0;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .calendario-btn.active {
+            background: #3887b8;
+            color: #fff;
+        }
+        .legenda-box {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(60,60,90,0.08);
+            padding: 12px 16px;
+            width: 220px;
+        }
+        .legenda-title {
+            font-weight: bold;
+            color: #3887b8;
+            margin-bottom: 8px;
+        }
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 0.98em;
+        }
+        .legenda-cor {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+        }
+        .legenda-cor.agendado {
+            background: #3887b8;
+        }
+        .legenda-cor.livre {
+            background: #fff;
+            border: 1px dashed #bfc9d1;
+        }
+        .legenda-cor.fechado {
+            background: #222;
+        }
+        @media (max-width: 1200px) {
+            .sidebar-right { display: none; }
+        }
+        @media (max-width: 900px) {
+            .layout { flex-direction: column; }
+            .sidebar {
+                position: static;
+                flex-direction: row;
+                width: 100vw;
+                height: 70px;
+                top: unset;
+                left: unset;
+                bottom: unset;
+                min-width: 0;
+                margin-left: 0;
+            }
+            .sidebar-logo {
+                width: 60px; height: 60px; margin-bottom: 0; margin-right: 10px;
+            }
+            .sidebar-logo img {
+                width: 50px; height: 50px;
+            }
+            .sidebar-menu ul { display: flex; flex-direction: row; overflow-x: auto; }
+            .sidebar-menu li { padding: 10px 12px; font-size: 1em; }
+            .main-content { padding: 0; margin-left: 0; }
+            .agenda-area { flex-direction: column; align-items: stretch; gap: 0; }
+            .agenda-box { min-width: 0; max-width: 100vw; margin: 0; }
+            .sidebar-right { width: 100%; margin: 0 auto; padding: 16px 0 0 0; position: static; }
+            .calendario-box, .legenda-box { width: 90vw; min-width: 0; margin: 0 auto 12px auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <button class="menu-btn"><i class="fa fa-bars"></i></button>
+            <span class="app-title">AppBarber</span>
+        </div>
+        <div class="header-center">
+            Profissionais:
+            <select class="prof-select" id="prof-select">
+                <option>Marcos</option>
+                <option>João</option>
+            </select>
+        </div>
+        <div class="header-right">
+            <i class="fa fa-bell"></i>
+            <i class="fa fa-envelope"></i>
+            <i class="fa fa-user-circle"></i>
+        </div>
+    </div>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="https://i.imgur.com/1Q9Z1Zm.png" alt="Barber Shop"/>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li class="active"><i class="fa fa-calendar-alt"></i> Agenda</li>
+                    <li><i class="fa fa-user-plus"></i> Cadastros</li>
+                    <li><i class="fa fa-cash-register"></i> Comandas</li>
+                    <li><i class="fa fa-dollar-sign"></i> Financeiro</li>
+                    <li><i class="fa fa-chart-bar"></i> Relatórios</li>
+                    <li><i class="fa fa-cog"></i> Configurações</li>
+                    <li><i class="fa fa-video"></i> Vídeos Tutoriais</li>
+                    <li><i class="fa fa-book"></i> Cursos</li>
+                    <li><i class="fa fa-question-circle"></i> Ajuda</li>
+                    <li><i class="fa fa-image"></i> Imagens de Divulgação</li>
+                </ul>
+            </nav>
+        </aside>
+        <div class="main-content">
+            <div class="agenda-area">
+                <div class="agenda-box">
+                    <div class="agenda-nav">
+                        <button class="nav-btn"><i class="fa fa-chevron-left"></i></button>
+                        <button class="nav-btn hoje">Hoje</button>
+                        <button class="nav-btn encaixe">+ Encaixe</button>
+                        <span class="agenda-data">Quinta, 11/Set/2025</span>
+                        <div class="agenda-view-btns">
+                            <button class="view-btn active">Dia</button>
+                            <button class="view-btn">Semana</button>
+                            <button class="view-btn">Mês</button>
+                        </div>
+                        <button class="nav-btn"><i class="fa fa-sync"></i></button>
+                    </div>
+                    <div class="agenda-table-area">
+                        <table class="agenda-table">
+                            <thead>
+                                <tr>
+                                    <th class="hora"></th>
+                                    <th>Marcos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agenda-tbody">
+                                <!-- Linhas geradas por JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <aside class="sidebar-right">
+                    <div class="calendario-box">
+                        <div class="calendario-title">Setembro 2025</div>
+                        <div class="calendario-mes">
+                            <button class="cal-btn">&lt;</button>
+                            <span>Setembro 2025</span>
+                            <button class="cal-btn">&gt;</button>
+                        </div>
+                        <div class="calendario" id="calendario">
+                            <!-- Calendário gerado por JS -->
+                        </div>
+                        <div class="calendario-btns">
+                            <button class="calendario-btn">Horários disponíveis</button>
+                            <button class="calendario-btn">Lista de Agendamentos</button>
+                            <button class="calendario-btn active">Lista de Espera</button>
+                        </div>
+                    </div>
+                    <div class="legenda-box">
+                        <div class="legenda-title">Legenda</div>
+                        <div class="legenda-item"><span class="legenda-cor agendado"></span>Agendado</div>
+                        <div class="legenda-item"><span class="legenda-cor livre"></span>Livre</div>
+                        <div class="legenda-item"><span class="legenda-cor fechado"></span>Fechado</div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Gera linhas da agenda agrupando horários fechados
+        const tbody = document.getElementById('agenda-tbody');
+        // Exemplo de configuração de horários abertos/fechados
+        const horarios = [
+            {inicio:'00:00', fim:'09:00', status:'fechado'},
+            {hora:'09:00', status:'livre'},
+            {hora:'09:30', status:'agendamento', nome:'Diego Couto', servico:'Corte de Cabelo'},
+            {hora:'10:00', status:'agendamento', nome:'Diego Couto', servico:'Barba Toalha Quente'},
+            {hora:'10:30', status:'agendamento', nome:'Humberto Franzi', servico:'Barba Toalha Quente'},
+            {hora:'11:00', status:'livre'},
+            {hora:'11:30', status:'livre'},
+            {inicio:'12:00', fim:'14:00', status:'almoço'},
+            {hora:'14:00', status:'agendamento', nome:'Thiago Ceccatto', servico:'Corte de Cabelo'},
+            {hora:'14:30', status:'livre'},
+            {hora:'15:00', status:'agendamento', nome:'Thiago Furtado', servico:'Corte de Cabelo'},
+            {hora:'15:30', status:'livre'},
+            {hora:'16:00', status:'agendamento', nome:'Paulinho Ceccatto Jr.', servico:'Corte de Cabelo'},
+            {hora:'16:30', status:'livre'},
+            {hora:'17:00', status:'agendamento', nome:'Nicolas Vieira', servico:'Corte de Cabelo'},
+            {hora:'17:30', status:'livre'},
+            {hora:'18:00', status:'agendamento', nome:'Célio Marcos', servico:'Barba Toalha Quente'},
+            {hora:'18:30', status:'livre'},
+            {inicio:'19:00', fim:'23:59', status:'fechado'}
+        ];
+        horarios.forEach((h, i) => {
+            const tr = document.createElement('tr');
+            // Agrupamento de horários fechados ou almoço
+            if(h.status === 'fechado' && h.inicio && h.fim) {
+                const tdHora = document.createElement('td');
+                tdHora.className = 'hora';
+                tdHora.textContent = `${h.inicio} - ${h.fim}`;
+                tr.appendChild(tdHora);
+                const tdAgenda = document.createElement('td');
+                tdAgenda.className = 'fechado-agrupado linha';
+                tdAgenda.textContent = 'Fechado';
+                tdAgenda.colSpan = 1;
+                tr.appendChild(tdAgenda);
+                tbody.appendChild(tr);
+                return;
+            }
+            if(h.status === 'almoço' && h.inicio && h.fim) {
+                const tdHora = document.createElement('td');
+                tdHora.className = 'hora';
+                tdHora.textContent = `${h.inicio} - ${h.fim}`;
+                tr.appendChild(tdHora);
+                const tdAgenda = document.createElement('td');
+                tdAgenda.className = 'almoço linha';
+                tdAgenda.textContent = 'Almoço';
+                tdAgenda.colSpan = 1;
+                tr.appendChild(tdAgenda);
+                tbody.appendChild(tr);
+                return;
+            }
+            // Hora normal
+            const tdHora = document.createElement('td');
+            tdHora.className = 'hora';
+            tdHora.textContent = h.hora;
+            tr.appendChild(tdHora);
+            const tdAgenda = document.createElement('td');
+            if(h.status === 'agendamento') {
+                tdAgenda.className = 'agendamento linha interagivel';
+                tdAgenda.innerHTML = `<b>${h.nome}</b> <span>- ${h.servico}</span>`;
+                tdAgenda.setAttribute('data-index', i);
+            } else if(h.status === 'livre') {
+                tdAgenda.className = 'livre linha interagivel';
+                tdAgenda.innerHTML = '<span style="opacity:0.5;">Clique para agendar</span>';
+                tdAgenda.setAttribute('data-index', i);
+            }
+            tr.appendChild(tdAgenda);
+            tbody.appendChild(tr);
+        });
+
+        // Calendário dinâmico fiel ao print
+        function renderCalendario(mes, ano, diaSelecionado) {
+            const cal = document.getElementById('calendario');
+            cal.innerHTML = '';
+            const diasSemana = ['Do','Se','Te','Qu','Qu','Se','Sa'];
+            diasSemana.forEach(dia=>{
+                let th = document.createElement('div');
+                th.className = 'calendario-header';
+                th.innerText = dia;
+                cal.appendChild(th);
+            });
+            let primeiroDia = new Date(ano, mes, 1);
+            let ultimoDia = new Date(ano, mes+1, 0);
+            for(let i=0; i<primeiroDia.getDay(); i++) {
+                let empty = document.createElement('div');
+                cal.appendChild(empty);
+            }
+            for(let d=1; d<=ultimoDia.getDate(); d++) {
+                let div = document.createElement('div');
+                div.className = 'calendario-dia';
+                if(d === diaSelecionado) div.classList.add('selecionada');
+                if(new Date().getDate() === d && new Date().getMonth() === mes && new Date().getFullYear() === ano) div.classList.add('hoje');
+                div.innerText = d;
+                cal.appendChild(div);
+            }
+        }
+        renderCalendario(8, 2025, 11); // Setembro (8), 2025, dia 11
+
+        // --- Interatividade visual nos agendamentos ---
+        // CSS extra para hover e menu flutuante
+        const style = document.createElement('style');
+        style.innerHTML = `
+        .agendamento.interagivel:hover, .livre.interagivel:hover {
+            background: #ffe066 !important;
+            color: #222 !important;
+            cursor: pointer;
+            box-shadow: 0 0 0 2px #ffe06655;
+        }
+        .menu-flutuante-agenda {
+            position: fixed;
+            z-index: 9999;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(60,60,90,0.18);
+            border: 1px solid #e5e9f2;
+            min-width: 170px;
+            padding: 0;
+            animation: menuPop 0.15s;
+        }
+        @keyframes menuPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .menu-flutuante-agenda button {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 14px 18px;
+            font-size: 1em;
+            text-align: left;
+            color: #3887b8;
+            cursor: pointer;
+            border-bottom: 1px solid #e5e9f2;
+            transition: background 0.15s;
+        }
+        .menu-flutuante-agenda button:last-child { border-bottom: none; }
+        .menu-flutuante-agenda button:hover {
+            background: #e5e9f2;
+            color: #222;
+        }
+        `;
+        document.head.appendChild(style);
+
+        let menuFlutuante = null;
+        function fecharMenuFlutuante() {
+            if(menuFlutuante) {
+                menuFlutuante.remove();
+                menuFlutuante = null;
+            }
+        }
+        document.addEventListener('click', function(e) {
+            if(menuFlutuante && !menuFlutuante.contains(e.target)) fecharMenuFlutuante();
+        });
+        tbody.addEventListener('contextmenu', e => e.preventDefault());
+        tbody.addEventListener('click', function(e) {
+            let td = e.target.closest('.interagivel');
+            if(!td) return;
+            fecharMenuFlutuante();
+            menuFlutuante = document.createElement('div');
+            menuFlutuante.className = 'menu-flutuante-agenda';
+            let idx = td.getAttribute('data-index');
+            if(td.classList.contains('agendamento')) {
+                menuFlutuante.innerHTML = `
+                    <button onclick="alert('Agendamento apagado (simulação)')">Apagar</button>
+                    <button onclick="alert('Editar agendamento (simulação)')">Editar</button>
+                `;
+            } else if(td.classList.contains('livre')) {
+                menuFlutuante.innerHTML = `
+                    <button onclick="alert('Novo agendamento (simulação)')">Agendar Alguém</button>
+                `;
+            }
+            // Posição do menu
+            let rect = td.getBoundingClientRect();
+            menuFlutuante.style.top = (rect.bottom + window.scrollY + 2) + 'px';
+            menuFlutuante.style.left = (rect.left + window.scrollX + 2) + 'px';
+            document.body.appendChild(menuFlutuante);
+        });
+    </script>
+</body>
+</html>

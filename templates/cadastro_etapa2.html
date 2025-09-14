@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Etapa 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha o conteúdo ao topo da janela */
+            min-height: 100vh; /* Garante que o corpo ocupe toda a altura da janela */
+            background-color: #f4f4f4;
+            overflow-y: auto; /* Adiciona barra de rolagem vertical, se necessário */
+        }
+        .container {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 510px;
+            min-width: 470px;
+            overflow: auto;
+        }
+        .container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+            overflow: visible;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            margin-top: -5px;
+            text-align: left;
+            z-index: 0;
+        }
+        .form-group input,
+        .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #cidade_empresa {
+            width: 450px; /* Define a largura do campo de seleção de cidade para 450px */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #razao_social,
+        #nome_fantasia {
+            width: 450px; /* Define a largura dos campos Razão Social e Nome Fantasia para 450px */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #cnpj {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #telefone_empresa {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #bairro {
+            width: 450px; /* Define a largura do container do Bairro para 450px */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #numero {
+            width: 100px; /* Define uma largura fixa para o campo Número */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+            margin-left: auto; /* Alinha o campo Número à direita */
+        }
+
+        #ponto_referencia {
+            width: 450px; /* Define a largura do campo Ponto de Referência para 450px */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-group-inline {
+            display: flex;
+            align-items: flex-start;
+            gap: 50px;
+        }
+        .form-group-inline input,
+        .form-group-inline select {
+            width: 100%;
+            padding: 8px;
+        }
+        .form-group-inline .left input,
+        .form-group-inline .right input {
+            width: 100%;
+        }
+        .form-group,
+        .form-group-inline {
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vendedor, me fala um pouco da sua empresa</h1>
+    <form method="POST" onsubmit="return validarFormulario()">
+            <div class="form-group">
+                <label for="cidade_empresa">Em qual cidade sua empresa está localizada?</label>
+                <select id="cidade_empresa" name="cidade_empresa" onchange="verificarCidade()" required>
+                    <option value="">Selecione uma cidade</option>
+                    <option value="Lages">Lages</option>
+                    <option value="outra">Outra</option>
+                </select>
+            </div>
+
+            <div id="mensagem-cidade" style="display: none; color: red; margin-top: 15px;">
+                Estamos apenas nas cidades mencionadas. Se você não encontrou sua cidade, seus dados já foram enviados para o administrador.
+                <br><br>
+                <button type="button" onclick="voltarInicio()">Voltar para o Início</button>
+                <button type="button" onclick="continuarComoComprador()">Continuar como Comprador</button>
+            </div>
+
+            <div class="form-group">
+                <label for="razao_social">Razão Social:</label>
+                <input type="text" id="razao_social" name="razao_social" placeholder="Digite a razão social da empresa" required>
+            </div>
+            <div class="form-group">
+                <label for="nome_fantasia">Nome Fantasia:</label>
+                <input type="text" id="nome_fantasia" name="nome_fantasia" placeholder="Digite o nome fantasia da empresa" required>
+            </div>
+            <div class="form-group-inline">
+                <div class="left">
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj" name="cnpj" placeholder="Digite um CNPJ válido" required>
+                    <div id="cnpj-msg" style="color:red;font-size:13px;"></div>
+                </div>
+                <div class="right">
+                    <label for="telefone_empresa">Telefone da Empresa:</label>
+                    <input type="tel" id="telefone_empresa" name="telefone_empresa" placeholder="Digite o telefone com DDD" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input type="text" id="bairro" name="bairro" placeholder="Digite o bairro da empresa" required>
+            </div>
+            <div class="form-group-inline">
+                <div class="left">
+                    <label for="endereco">Endereço:</label>
+                    <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço da empresa" required>
+                </div>
+                <div class="right" style="max-width: 60px;">
+                    <label for="numero">Número:</label>
+                    <input type="text" id="numero" name="numero" placeholder="Nº" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ponto_referencia">Ponto de Referência:</label>
+                <input type="text" id="ponto_referencia" name="ponto_referencia" placeholder="Digite um ponto de referência" required>
+            </div>
+            <div class="form-group">
+                <label for="dias_funcionamento">Dias de Funcionamento:</label>
+                <!-- Switch Pausa para o Meio-dia -->
+                <div style="margin-bottom: 18px; display: flex; align-items: center; gap: 16px;">
+                        <span style="font-weight: bold; font-size: 1.05em;">Ativar pausa para o meio-dia?</span>
+                        <div id="switch-pausa" onclick="toggleSwitchPausa()" style="width: 70px; height: 28px; background-color: #e53935; border-radius: 14px; cursor: pointer; position: relative; transition: background 0.2s; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; box-sizing: border-box;">
+                            <span id="switch-pausa-sim" style="color: #d4ff00; font-weight: bold; font-size: 0.85em; position: absolute; left: 10px; z-index: 2; opacity: 0; transition: opacity 0.2s;">SIM</span>
+                            <span id="switch-pausa-nao" style="color: #fff; font-weight: bold; font-size: 0.85em; position: absolute; right: 6px; z-index: 2; opacity: 1; transition: opacity 0.2s;">NÃO</span>
+                            <div id="switch-pausa-knob" style="width: 26px; height: 26px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 2px; transition: left 0.2s;"></div>
+                        </div>
+                </div>
+                <table id="tabela-funcionamento" style="width: 100%; max-width: 470px; margin-left: auto; margin-right: auto; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: #fff;">
+                    <tr>
+                        <th style="border: 1px solid #ccc; padding: 2px; text-align: center; min-width: 60px;">Status</th>
+                        <th style="border: 1px solid #ccc; padding: 2px; text-align: center; min-width: 60px;">Dia</th>
+                        <th style="border: 1px solid #ccc; padding: 2px; text-align: center; min-width: 80px;">Abre</th>
+                        <th style="border: 1px solid #ccc; padding: 2px; text-align: center; min-width: 80px;">Fecha</th>
+                        <th class="col-pausa" style="border: 1px solid #ccc; padding: 2px; text-align: center; min-width: 60px;">Abre</th>
+                        <th class="col-pausa" style="border: 1px solid #ccc; padding: 2px; text-align: center; min-width: 60px;">Fecha</th>
+                    </tr>
+                    <tr style="height: 20px;">
+                        <td style="border: 1px solid #ccc; padding: 1px; text-align: center; vertical-align: middle;">
+                            <div id="status_Seg" onclick="toggleSwitch('Seg')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 1px; text-align: center;">Seg</td>
+                        <td style="border: 1px solid #ccc; padding: 1px;"><input type="time" name="horario_abre_Seg" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 1px;"><input type="time" name="horario_fecha_Seg" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('Seg')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 1px;"><input type="time" name="pausa_abre_Seg" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 1px;"><input type="time" name="pausa_fecha_Seg" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center; vertical-align: middle;">
+                            <div id="status_Ter" onclick="toggleSwitch('Ter')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">Ter</td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_abre_Ter" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_fecha_Ter" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('Ter')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_abre_Ter" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_fecha_Ter" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center; vertical-align: middle;">
+                            <div id="status_Qua" onclick="toggleSwitch('Qua')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">Qua</td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_abre_Qua" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_fecha_Qua" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('Qua')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_abre_Qua" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_fecha_Qua" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center; vertical-align: middle;">
+                            <div id="status_Qui" onclick="toggleSwitch('Qui')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">Qui</td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_abre_Qui" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_fecha_Qui" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('Qui')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_abre_Qui" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_fecha_Qui" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center; vertical-align: middle;">
+                            <div id="status_Sex" onclick="toggleSwitch('Sex')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">Sex</td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_abre_Sex" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_fecha_Sex" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('Sex')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_abre_Sex" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_fecha_Sex" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center; vertical-align: middle;">
+                            <div id="status_Sáb" onclick="toggleSwitch('Sáb')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">Sáb</td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_abre_Sáb" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_fecha_Sáb" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('Sáb')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_abre_Sáb" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_fecha_Sáb" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center; vertical-align: middle;">
+                            <div id="status_DOM" onclick="toggleSwitch('DOM')" style="width: 50px; height: 20px; background-color: red; border-radius: 10px; cursor: pointer; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 18px; height: 18px; background-color: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: all 0.3s;"></div>
+                            </div>
+                        </td>
+                        <td style="border: 1px solid #ccc; padding: 3px; text-align: center;">Dom</td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_abre_DOM" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="horario_fecha_DOM" style="font-size: 10px; width: 100%;" step="300" disabled onchange="setPausaAbre('DOM')"></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_abre_DOM" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                        <td class="col-pausa" style="border: 1px solid #ccc; padding: 3px;"><input type="time" name="pausa_fecha_DOM" style="font-size: 10px; width: 100%;" step="300" disabled></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo_servico">Tipo de Serviço:</label>
+                <select id="tipo_servico" name="tipo_servico" required>
+                    <option value="">Selecione uma opção</option>
+                    <option value="entrega">Entrega</option>
+                    <option value="consumo_local">Consumo no Local</option>
+                    <option value="ambos">Ambos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="logo_empresa">Logo da Empresa:</label>
+                <input type="file" id="logo_empresa" name="logo_empresa" accept="image/*">
+            </div>
+            <div class="buttons">
+                <button type="button" onclick="window.history.back()">Voltar</button>
+                <button type="submit">Avançar</button>
+            </div>
+        </form>
+    </div>
+    <script>
+
+        document.getElementById('cnpj').addEventListener('input', function () {
+            const cnpjInput = this;
+            const cnpj = cnpjInput.value.replace(/\D/g, '');
+            const msgDiv = document.getElementById('cnpj-msg');
+            if (cnpj.length === 14) {
+                fetch('/verifica_existente', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'tipo=cnpj&valor=' + encodeURIComponent(cnpj)
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.existe) {
+                        msgDiv.textContent = 'CNPJ já cadastrado!';
+                        cnpjInput.style.borderColor = 'red';
+                    } else {
+                        msgDiv.textContent = '';
+                        cnpjInput.style.borderColor = '';
+                    }
+                });
+            } else {
+                msgDiv.textContent = '';
+                cnpjInput.style.borderColor = '';
+            }
+        });
+        // Esconde/mostra as colunas de pausa conforme o estado do switch
+        // Deixa as linhas brancas quando as colunas de pausa estiverem desativadas
+        function updateRowBackgrounds() {
+            const show = pausaAtiva;
+            const table = document.getElementById('tabela-funcionamento');
+            if (!table) return;
+            for (let i = 1; i < table.rows.length; i++) { // pula o header
+                table.rows[i].style.background = show ? '' : '#fff';
+            }
+        }
+
+        // Deixa as bordas das duas últimas colunas invisíveis quando desativadas
+        function updatePausaBorders() {
+            const show = pausaAtiva;
+            document.querySelectorAll('.col-pausa').forEach(function(col) {
+                if (show) {
+                    col.style.border = '';
+                } else {
+                    col.style.border = 'none';
+                }
+            });
+        }
+
+        function updatePausaColumns() {
+            const show = pausaAtiva;
+            document.querySelectorAll('.col-pausa').forEach(function(col) {
+                if (show) {
+                    col.style.visibility = '';
+                    col.style.width = '';
+                    col.style.minWidth = '';
+                    col.style.border = '';
+                } else {
+                    col.style.visibility = 'collapse';
+                    col.style.width = '0px';
+                    col.style.minWidth = '0px';
+                    col.style.border = 'none';
+                }
+            });
+            updateRowBackgrounds();
+            updatePausaBorders();
+        }
+
+        // Switch tipo chave seletora para pausa do meio-dia
+                let pausaAtiva = false;
+                function toggleSwitchPausa() {
+                    pausaAtiva = !pausaAtiva;
+                    const switchDiv = document.getElementById('switch-pausa');
+                    const knob = document.getElementById('switch-pausa-knob');
+                    const sim = document.getElementById('switch-pausa-sim');
+                    const nao = document.getElementById('switch-pausa-nao');
+                    if (pausaAtiva) {
+                        switchDiv.style.backgroundColor = '#43a047';
+                        knob.style.left = '42px';
+                        sim.style.opacity = 1;
+                        nao.style.opacity = 0;
+                        updatePausaColumns();
+                    } else {
+                        switchDiv.style.backgroundColor = '#e53935';
+                        knob.style.left = '2px';
+                        sim.style.opacity = 0;
+                        nao.style.opacity = 1;
+                        updatePausaColumns();
+                    }
+                }
+        // Inicializa o estado das colunas ao carregar a página
+        document.addEventListener('DOMContentLoaded', updatePausaColumns);
+        function validarFormulario() {
+            const cidade = document.getElementById('cidade_empresa').value;
+            if (cidade === 'outras') {
+                alert('Infelizmente sua empresa não está nas cidades que atendemos.');
+                return false;
+            }
+            return true;
+        }
+
+        function verificarCidade() {
+            const cidade = document.getElementById('cidade_empresa').value;
+            if (cidade === 'outra') {
+                window.location.href = '/cidade_nao_atendida';
+            }
+        }
+
+        function enviarMensagemAdmin() {
+            const nome = document.getElementById('razao_social').value;
+            const telefone = document.getElementById('telefone_empresa').value;
+            const cidade = document.getElementById('cidade_empresa').value;
+
+            // Simula o envio dos dados para o admin (substituir por lógica real de backend)
+            console.log(`Mensagem enviada ao admin: Nome: ${nome}, Telefone: ${telefone}, Cidade: ${cidade}`);
+            alert('Seus dados foram enviados para o administrador.');
+        }
+
+        function voltarInicio() {
+            window.location.href = '/';
+        }
+
+        function continuarComoComprador() {
+            window.location.href = '/cadastro_etapa3';
+        }
+
+        function verificarCidade() {
+            const cidade = document.getElementById('cidade_empresa').value;
+
+            if (cidade === 'outra') {
+                window.location.href = '/cidade_nao_atendida';
+            }
+        }
+
+        function toggleHorario(checkbox) {
+            const dia = checkbox.value;
+            const status = document.getElementById(`status_${dia}`);
+            const horariosContainer = document.getElementById('horarios_dias');
+
+            if (checkbox.checked) {
+                status.style.color = 'green';
+                status.textContent = 'Aberto';
+
+                const horarioDiv = document.createElement('div');
+                horarioDiv.id = `horario_${dia}`;
+                horarioDiv.style.marginBottom = '10px';
+                horarioDiv.innerHTML = `
+                    <label>${dia}:</label>
+                    <input type="time" name="horario_abre_${dia}" placeholder="Abre">
+                    <input type="time" name="horario_fecha_${dia}" placeholder="Fecha">
+                    <label style="margin-left: 10px;">
+                        <input type="checkbox" onchange="togglePausa(this, '${dia}')"> Fecha para o Meio-dia
+                    </label>
+                    <div id="pausa_${dia}" style="display: none; margin-top: 10px;">
+                        <input type="time" name="pausa_abre_${dia}" placeholder="Pausa Abre">
+                        <input type="time" name="pausa_fecha_${dia}" placeholder="Pausa Fecha">
+                    </div>
+                `;
+                horariosContainer.appendChild(horarioDiv);
+            } else {
+                status.style.color = 'red';
+                status.textContent = 'Fechado';
+
+                const horarioDiv = document.getElementById(`horario_${dia}`);
+                if (horarioDiv) {
+                    horariosContainer.removeChild(horarioDiv);
+                }
+            }
+        }
+
+        function togglePausa(checkbox, dia) {
+            const pausaDiv = document.getElementById(`pausa_${dia}`);
+            if (checkbox.checked) {
+                pausaDiv.style.display = 'block';
+            } else {
+                pausaDiv.style.display = 'none';
+            }
+        }
+
+        document.getElementById('dias_funcionamento').addEventListener('change', function(event) {
+            const dia = event.target.value;
+            const horariosContainer = document.getElementById('horarios_dias');
+
+            if (event.target.checked) {
+                const horarioDiv = document.createElement('div');
+                horarioDiv.id = `horario_${dia}`;
+                horarioDiv.style.marginBottom = '10px';
+                horarioDiv.innerHTML = `
+                    <label>${dia}:</label>
+                    <input type="time" name="horario_abre_${dia}" placeholder="Abre">
+                    <input type="time" name="horario_fecha_${dia}" placeholder="Fecha">
+                `;
+                horariosContainer.appendChild(horarioDiv);
+            } else {
+                const horarioDiv = document.getElementById(`horario_${dia}`);
+                if (horarioDiv) {
+                    horariosContainer.removeChild(horarioDiv);
+                }
+            }
+        });
+
+        function togglePausaTabela(checkbox, dia) {
+            const pausaAbre = document.querySelector(`input[name='pausa_abre_${dia}']`);
+            const pausaFecha = document.querySelector(`input[name='pausa_fecha_${dia}']`);
+
+            if (checkbox.checked) {
+                pausaAbre.disabled = false;
+                pausaFecha.disabled = false;
+            } else {
+                pausaAbre.disabled = true;
+                pausaFecha.disabled = true;
+                pausaAbre.value = '';
+                pausaFecha.value = '';
+            }
+        }
+
+        function toggleDia(dia) {
+            const button = document.getElementById(`status_${dia}`);
+            const abre = document.querySelector(`input[name='horario_abre_${dia}']`);
+            const fecha = document.querySelector(`input[name='horario_fecha_${dia}']`);
+            const pausaAbre = document.querySelector(`input[name='pausa_abre_${dia}']`);
+            const pausaFecha = document.querySelector(`input[name='pausa_fecha_${dia}']`);
+
+            const isFechado = button.textContent === 'Fechado';
+
+            if (isFechado) {
+                button.textContent = 'Aberto';
+                button.style.backgroundColor = 'green';
+                abre.disabled = false;
+                fecha.disabled = false;
+                pausaAbre.disabled = false;
+                pausaFecha.disabled = false;
+            } else {
+                button.textContent = 'Fechado';
+                button.style.backgroundColor = 'red';
+                abre.disabled = true;
+                fecha.disabled = true;
+                pausaAbre.disabled = true;
+                pausaFecha.disabled = true;
+                abre.value = '';
+                fecha.value = '';
+                pausaAbre.value = '';
+                pausaFecha.value = '';
+            }
+        }
+
+        const diasSemana = ['Seg','Ter','Qua','Qui','Sex','Sáb','DOM'];
+        function copiarHorariosDeCima(diaAtual) {
+            const idx = diasSemana.indexOf(diaAtual);
+            const padrao = ['08:00','13:00','14:00','18:00'];
+            let valores = [...padrao];
+            if (idx > 0) {
+                const diaAnterior = diasSemana[idx-1];
+                // Copia o ABRE do anterior
+                const anteriorAbre = document.querySelector(`input[name='horario_abre_${diaAnterior}']`);
+                if (anteriorAbre && anteriorAbre.value) {
+                    let v = anteriorAbre.value;
+                    if (v.length === 5) v = v.substring(0,3)+'00';
+                    valores[0] = v;
+                }
+                // FECHA: calcula 5h depois do ABRE do mesmo dia
+                let horaAbre = valores[0];
+                if (horaAbre && horaAbre.length === 5) {
+                    let [h,m] = horaAbre.split(":").map(Number);
+                    h = (h + 5) % 24;
+                    valores[1] = (h<10?"0":"")+h+":00";
+                }
+                // Pausa abre: igual ao FECHA do mesmo dia
+                valores[2] = valores[1];
+                // Pausa fecha: copia do anterior se existir
+                const anteriorPausaFecha = document.querySelector(`input[name='pausa_fecha_${diaAnterior}']`);
+                if (anteriorPausaFecha && anteriorPausaFecha.value) {
+                    let v = anteriorPausaFecha.value;
+                    if (v.length === 5) v = v.substring(0,3)+'00';
+                    valores[3] = v;
+                }
+            }
+            ['horario_abre_','horario_fecha_','pausa_abre_','pausa_fecha_'].forEach((prefix, i) => {
+                const atual = document.querySelector(`input[name='${prefix}${diaAtual}']`);
+                if (atual) {
+                    atual.value = valores[i];
+                    atual.dispatchEvent(new Event('input', {bubbles:true}));
+                }
+            });
+        }
+        // Ao ativar um novo dia, copiar horários do anterior
+        function toggleSwitch(dia) {
+            const switchElement = document.getElementById(`status_${dia}`);
+            const toggle = switchElement.querySelector('div');
+            const abre = document.querySelector(`input[name='horario_abre_${dia}']`);
+            const fecha = document.querySelector(`input[name='horario_fecha_${dia}']`);
+            const pausaAbre = document.querySelector(`input[name='pausa_abre_${dia}']`);
+            const pausaFecha = document.querySelector(`input[name='pausa_fecha_${dia}']`);
+
+            const isOff = toggle.style.left === '1px' || toggle.style.left === '';
+
+            if (isOff) {
+                switchElement.style.backgroundColor = 'green';
+                toggle.style.left = '31px';
+                abre.disabled = false;
+                fecha.disabled = false;
+                pausaAbre.disabled = false;
+                pausaFecha.disabled = false;
+                setTimeout(function(){
+                    copiarHorariosDeCima(dia);
+                }, 50);
+            } else {
+                switchElement.style.backgroundColor = 'red';
+                toggle.style.left = '1px';
+                abre.disabled = true;
+                fecha.disabled = true;
+                pausaAbre.disabled = true;
+                pausaFecha.disabled = true;
+                abre.value = '';
+                fecha.value = '';
+                pausaAbre.value = '';
+                pausaFecha.value = '';
+            }
+        }
+
+        function setPausaAbre(dia) {
+            // Só executa se a pausa estiver ativada
+            const pausaAtiva = document.getElementById('switch-pausa-sim').style.opacity == 1;
+            if (!pausaAtiva) return;
+            const fecha = document.querySelector(`input[name='horario_fecha_${dia}']`);
+            const pausaAbre = document.querySelector(`input[name='pausa_abre_${dia}']`);
+            if (fecha && pausaAbre) {
+                pausaAbre.value = fecha.value;
+            }
+        }
+
+        // Validação de campos obrigatórios antes de enviar
+        document.querySelector('form').addEventListener('submit', function(e) {
+            let campos = [
+                'razao_social', 'nome_fantasia', 'cnpj', 'telefone_empresa', 'cidade_empresa',
+                'bairro', 'endereco', 'numero', 'ponto_referencia', 'tipo_servico'
+            ];
+            let algumFaltando = false;
+            campos.forEach(function(campo) {
+                let el = document.getElementById(campo);
+                if (!el.value || (el.tagName === 'SELECT' && el.value === '')) {
+                    el.style.borderColor = 'red';
+                    el.style.background = '#ffeaea';
+                    algumFaltando = true;
+                } else {
+                    el.style.borderColor = '';
+                    el.style.background = '';
+                }
+            });
+            if (algumFaltando) {
+                e.preventDefault();
+                alert('Preencha todos os campos obrigatórios destacados em vermelho.');
+                return false;
+            }
+            return true;
+        });
+    </script>
+</body>
+</html>

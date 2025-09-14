@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Área do Admin</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="admin-page-bg">
+    <header class="header-principal">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icone"><i class="fa-solid fa-tree"></i></span>
+                <span class="logo-texto">Passaporte do Pinhão</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/logout">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="admin-card admin-card-wide">
+            <div class="admin-col">
+                <section class="admin-info">
+                    <h2><i class="fa fa-user-shield"></i> Painel do Administrador</h2>
+                    <p>Gerencie empresas, ofertas, cidades e usuários do sistema.</p>
+                </section>
+                <section class="admin-section">
+                    <h3><i class="fa fa-building"></i> Empresas (Aprovação e Gerenciamento)</h3>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for empresa in empresas %}
+                                <tr>
+                                    <td>{{ empresa[0] }}</td>
+                                    <td>{{ empresa[1] }}</td>
+                                    <td>{{ empresa[2] }}</td>
+                                    <td>{% if empresa[3] %}<span class="admin-status aprovado">Aprovada</span>{% else %}<span class="admin-status pendente">Pendente</span>{% endif %}</td>
+                                    <td>
+                                        {% if not empresa[3] %}
+                                        <form method="POST" action="/admin/empresa/aprovar" style="display:inline;">
+                                            <input type="hidden" name="empresa_id" value="{{ empresa[0] }}">
+                                            <button class="admin-btn admin-btn-aprovar" type="submit"><i class="fa fa-check"></i> Aprovar</button>
+                                        </form>
+                                        <form method="POST" action="/admin/empresa/reprovar" style="display:inline;">
+                                            <input type="hidden" name="empresa_id" value="{{ empresa[0] }}">
+                                            <button class="admin-btn admin-btn-reprovar" type="submit"><i class="fa fa-times"></i> Reprovar</button>
+                                        </form>
+                                        {% else %}
+                                        <span>-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="admin-section">
+                    <h3><i class="fa fa-tags"></i> Ofertas Cadastradas</h3>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table admin-table-compact">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th>Descrição</th>
+                                    <th>Preço</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for oferta in ofertas %}
+                                <tr>
+                                    <td>{{ oferta[0] }}</td>
+                                    <td>{{ oferta[1] }}</td>
+                                    <td>{{ oferta[2] }}</td>
+                                    <td>R$ {{ '%.2f'|format(oferta[3]) }}</td>
+                                    <td style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                                        <form method="POST" action="/admin/oferta/exclusiva" style="margin:0;">
+                                            <input type="hidden" name="oferta_id" value="{{ oferta[0] }}">
+                                            <button class="admin-btn admin-btn-aprovar" type="submit"><i class="fa fa-star"></i> Tornar Exclusiva</button>
+                                        </form>
+                                        <form method="POST" action="/admin/oferta/destacar" style="margin:0;">
+                                            <input type="hidden" name="oferta_id" value="{{ oferta[0] }}">
+                                            <button class="admin-btn admin-btn-add" type="submit"><i class="fa fa-arrow-up"></i> Destacar</button>
+                                        </form>
+                                        <form method="POST" action="/admin/oferta/bloquear" style="margin:0;">
+                                            <input type="hidden" name="oferta_id" value="{{ oferta[0] }}">
+                                            <button class="admin-btn admin-btn-reprovar" type="submit"><i class="fa fa-ban"></i> Bloquear</button>
+                                        </form>
+                                        <form method="POST" action="/admin/oferta/remover" style="margin:0;">
+                                            <input type="hidden" name="oferta_id" value="{{ oferta[0] }}">
+                                            <button class="admin-btn admin-btn-reprovar" type="submit" onclick="return confirm('Tem certeza que deseja remover esta oferta?');"><i class="fa fa-trash"></i> Remover</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div class="admin-col">
+                <section class="admin-section">
+                    <h3><i class="fa fa-city"></i> Cidades</h3>
+                    <form method="POST" action="/admin/cidades" class="admin-form" style="margin-bottom: 18px; flex-direction: column; align-items: flex-start; gap: 8px;">
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <input type="text" name="nome" placeholder="Nome da cidade" required style="padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc;">
+                            <input type="text" name="estado" placeholder="Estado (UF)" maxlength="2" required style="padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; width: 60px;">
+                            <button type="submit" class="admin-btn admin-btn-add"><i class="fa fa-plus"></i> Cadastrar cidade</button>
+                        </div>
+                    </form>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table admin-table-compact">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Estado</th>
+                                    <th>Ativo</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for cidade in cidades %}
+                                <tr>
+                                    <td>{{ cidade[0] }}</td>
+                                    <td>{{ cidade[1] }}</td>
+                                    <td>{{ cidade[2] }}</td>
+                                    <td>{% if cidade[3] %}<span class="admin-status aprovado">Sim</span>{% else %}<span class="admin-status pendente">Não</span>{% endif %}</td>
+                                    <td style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                                        <form method="POST" action="/admin/cidades/ativar" style="margin:0;">
+                                            <input type="hidden" name="cidade_id" value="{{ cidade[0] }}">
+                                            <button class="admin-btn admin-btn-aprovar" type="submit"><i class="fa fa-check"></i> Ativar</button>
+                                        </form>
+                                        <form method="POST" action="/admin/cidades/desativar" style="margin:0;">
+                                            <input type="hidden" name="cidade_id" value="{{ cidade[0] }}">
+                                            <button class="admin-btn admin-btn-reprovar" type="submit"><i class="fa fa-times"></i> Desativar</button>
+                                        </form>
+                                        <form method="POST" action="/admin/cidades/apagar" style="margin:0;">
+                                            <input type="hidden" name="cidade_id" value="{{ cidade[0] }}">
+                                            <button class="admin-btn admin-btn-reprovar" type="submit" onclick="return confirm('Tem certeza que deseja apagar esta cidade?');"><i class="fa fa-trash"></i> Apagar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="admin-section">
+                    <h3><i class="fa fa-users"></i> Usuários cadastrados</h3>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>País</th>
+                                <th>Data Nasc.</th>
+                                <th>Tipo</th>
+                                <th>Foto</th>
+                                <th>Senha Hash</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for u in usuarios %}
+                            <tr>
+                                <td>{{ u[0] }}</td>
+                                <td class="admin-nome">{{ u[1] }}</td>
+                                <td class="admin-email">{{ u[2] }}</td>
+                                <td>{{ u[5] }}</td>
+                                <td>{{ u[6] }}</td>
+                                <td>{{ u[7] }}</td>
+                                <td>{{ u[8] }}</td>
+                                <td>{{ u[10] }}</td>
+                                <td>{{ u[4] }}</td>
+                                <td>{% if u[9] %}<img src="{{ u[9] }}" alt="foto" class="admin-foto">{% endif %}</td>
+                                <td class="admin-hash">{{ u[3] }}</td>
+                                <td>
+                                    <form method="POST" action="/admin/usuario/excluir" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                        <input type="hidden" name="usuario_id" value="{{ u[0] }}">
+                                        <button class="admin-btn admin-btn-reprovar" type="submit"><i class="fa fa-trash"></i> Excluir</button>
+                                    </form>
+                                    <a class="admin-link" href="/admin/usuario/{{ u[0] }}" target="_blank"><i class="fa fa-user"></i> Ver página</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Passaporte do Pinhão. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

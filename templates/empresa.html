@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Área da Empresa</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body class="admin-page-bg">
+    <header class="header-principal">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icone"><i class="fa-solid fa-tree"></i></span>
+                <span class="logo-texto">Passaporte do Pinhão</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/logout">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="admin-card">
+            <section class="admin-info">
+                <h2><i class="fa fa-building"></i> Área da Empresa</h2>
+                <p>Gerencie seus dados, ofertas e cupons de forma centralizada.</p>
+            </section>
+
+            <section class="admin-section">
+                <h3><i class="fa fa-id-card"></i> Dados da Empresa</h3>
+                <table class="admin-table-detalhe">
+                    <tr><th>Nome Fantasia:</th><td>{{ empresa.nome_fantasia or empresa.nome }}</td></tr>
+                    <tr><th>Razão Social:</th><td>{{ empresa.nome }}</td></tr>
+                    <tr><th>CNPJ:</th><td>{{ empresa.cnpj }}</td></tr>
+                    <tr><th>Cidade:</th><td>{{ empresa.cidade_nome }}</td></tr>
+                    <tr><th>Telefone:</th><td>{{ empresa.telefone }}</td></tr>
+                    <tr><th>Email:</th><td>{{ empresa.email }}</td></tr>
+                    <tr><th>Ações:</th><td><a href="/empresa/editar" class="admin-btn" style="background:#338a53;color:#fff;"><i class="fa fa-edit"></i> Editar Dados</a></td></tr>
+                </table>
+            </section>
+
+            <section class="admin-section">
+                <h3><i class="fa fa-plus-circle"></i> Cadastrar Nova Oferta</h3>
+                <form action="/cadastro_oferta" method="POST" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+                    <input type="text" name="titulo" placeholder="Título da Oferta" required style="flex:1;min-width:180px;">
+                    <input type="number" name="preco" placeholder="Preço" step="0.01" required style="width:120px;">
+                    <input type="text" name="imagem" placeholder="URL da Imagem" style="flex:1;min-width:180px;">
+                    <input type="number" name="valor_original" placeholder="Valor Original" step="0.01" style="width:120px;">
+                    <label style="margin-bottom:0;display:flex;align-items:center;gap:4px;">
+                        <input type="checkbox" name="exclusivo"> Oferta Exclusiva
+                    </label>
+                    <textarea name="descricao" placeholder="Descrição da Oferta" required style="flex:2;min-width:220px;"></textarea>
+                    <button type="submit" class="admin-btn" style="background:#338a53;color:#fff;"><i class="fa fa-plus"></i> Cadastrar Oferta</button>
+                </form>
+            </section>
+
+            <section class="admin-section">
+                <h3><i class="fa fa-tags"></i> Ofertas Cadastradas</h3>
+                <div class="admin-table-wrap">
+                <table class="admin-table admin-table-compact">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Preço</th>
+                            <th>Exclusivo</th>
+                            <th>Valor Original</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for oferta in ofertas %}
+                        <tr>
+                            <td>{{ oferta[0] }}</td>
+                            <td>{{ oferta[1] }}</td>
+                            <td>R$ {{ '%.2f'|format(oferta[3]) }}</td>
+                            <td>{% if oferta[5] %}<span class="admin-status aprovado">Sim</span>{% else %}<span class="admin-status pendente">Não</span>{% endif %}</td>
+                            <td>{% if oferta[6] %}R$ {{ '%.2f'|format(oferta[6]) }}{% else %}-{% endif %}</td>
+                            <td><a href="/oferta/{{ oferta[0] }}" class="btn-ver-empresa"><i class="fa fa-eye"></i> Ver Detalhes</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </section>
+
+            <section class="admin-section">
+                <h3><i class="fa fa-ticket-alt"></i> Cupons Comprados</h3>
+                <div class="admin-table-wrap">
+                <table class="admin-table admin-table-compact">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Oferta</th>
+                            <th>Cliente</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for cupom in cupons %}
+                        <tr>
+                            <td>{{ cupom[0] }}</td>
+                            <td>{{ cupom[1] }}</td>
+                            <td>{{ cupom[2] }}</td>
+                            <td><button class="admin-btn admin-btn-aprovar" style="background:#338a53;color:#fff;"><i class="fa fa-check"></i> Ativar Cupom</button></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Passaporte do Pinhão. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

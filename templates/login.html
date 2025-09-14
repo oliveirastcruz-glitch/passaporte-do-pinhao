@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Passaporte do Pinhão</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="login-bg">
+    <div class="login-card">
+        <div class="login-logo">
+            <i class="fa-solid fa-tree"></i>
+            <span>Passaporte do Pinhão</span>
+        </div>
+        <h2>Bem-vindo!</h2>
+        <form method="POST" autocomplete="off">
+            <div class="input-group">
+                <label for="email"><i class="fa fa-envelope"></i></label>
+                <input type="email" name="email" id="email" placeholder="E-mail" required>
+            </div>
+            <div class="input-group">
+                <label for="senha"><i class="fa fa-lock"></i></label>
+                <input type="password" name="senha" id="senha" placeholder="Senha" required>
+                <span class="toggle-senha" onclick="toggleSenha()"><i id="olho" class="fa fa-eye"></i></span>
+            </div>
+            <button class="btn-login" type="submit">Entrar</button>
+        </form>
+        <div class="login-actions">
+            <a href="/esqueci-senha"><i class="fa fa-question-circle"></i> Esqueci a senha</a>
+            <a href="/cadastro" class="btn-cadastrar">Cadastrar</a>
+        </div>
+        {% if error == 'email_not_found' %}
+            <p class="login-error">E-mail não encontrado.</p>
+        {% elif error == 'invalid_password' %}
+            <p class="login-error">Senha inválida.</p>
+        {% endif %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script>
+    function toggleSenha() {
+        var input = document.getElementById('senha');
+        var olho = document.getElementById('olho');
+        if (input.type === 'password') {
+            input.type = 'text';
+            olho.classList.remove('fa-eye');
+            olho.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            olho.classList.remove('fa-eye-slash');
+            olho.classList.add('fa-eye');
+        }
+    }
+    </script>
+</body>
+</html>

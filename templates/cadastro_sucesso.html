@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro realizado com sucesso</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { background: #fff; padding: 40px 32px; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); text-align: center; }
+        .box h1 { color: #28a745; margin-bottom: 18px; }
+        .box p { font-size: 18px; margin-bottom: 24px; }
+        .box button { background: #007bff; color: #fff; border: none; padding: 12px 28px; border-radius: 5px; font-size: 16px; cursor: pointer; margin: 0 8px; }
+        .box button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Cadastro realizado com sucesso!</h1>
+        <p>Bem-vindo, <b>{{ nome }}</b>! Seu cadastro foi concluído.</p>
+        <p>Deseja se manter logado?</p>
+        <form action="/" method="get" style="display:inline;">
+            <button type="submit">Continuar no site</button>
+        </form>
+        <form action="/logout" method="post" style="display:inline;">
+            <button type="submit">Sair</button>
+        </form>
+    </div>
+</body>
+</html>

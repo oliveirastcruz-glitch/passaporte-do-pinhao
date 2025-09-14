@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueci a Senha</title>
+</head>
+<body>
+    <h1>Recuperar Senha</h1>
+    <form method="POST">
+        <input type="email" name="email" placeholder="Digite seu e-mail" required>
+        <button type="submit">Enviar Código</button>
+    </form>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
