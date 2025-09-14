@@ -1,1 +1,4 @@
 flask
+gunicorn
+bcrypt
+cryptography
