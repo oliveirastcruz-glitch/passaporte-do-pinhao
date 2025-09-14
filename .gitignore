@@ -1,0 +1,38 @@
+# === Banco de dados e dados locais ===
+database/
+*.db
+usuarios.db
+
+# === Ferramentas sqlite e binários ===
+sqlite-tools-win-x64-3500400/
+*.exe
+
+# === Uploads de usuários (não versionar arquivos) ===
+static/uploads/
+!static/uploads/.gitkeep
+
+# === Arquivos sensíveis / não necessários ===
+proton-recovery-kit.pdf
+twilio_2FA_recovery_code.txt
+
+# === Ambiente Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.build/
+venv/
+.env
+.env.*
+
+# === Logs ===
+*.log
+
+# === Sistema operacional ===
+.DS_Store
+Thumbs.db
+
+# === IDE/Editor ===
+.vscode/
+.idea/
