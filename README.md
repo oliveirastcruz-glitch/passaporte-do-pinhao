@@ -27,6 +27,36 @@ python main.py
 ```
 Acesse: http://127.0.0.1:5000
 
+## Deploy no Render
+
+### Preparação das Dependências
+O arquivo `requirements.txt` já inclui todas as dependências necessárias para produção:
+- **flask**: Framework web principal
+- **gunicorn**: Servidor WSGI para produção
+- **bcrypt**: Para hash de senhas (usado pela aplicação)
+- **cryptography**: Para criptografia de dados sensíveis (Fernet)
+
+### Configuração no Render
+1. **Comando de Start**: Configure o comando de inicialização no Render como:
+   ```
+   gunicorn main:app
+   ```
+
+2. **Variáveis de Ambiente**:
+   - O Render automaticamente define a variável `PORT` - a aplicação deve usar `os.environ.get('PORT', 5000)`
+   - Defina `FERNET_KEY` como variável de ambiente para a chave de criptografia em produção
+   - Configure outras variáveis sensíveis conforme necessário
+
+3. **Configurações Recomendadas**:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn main:app`
+   - **Environment**: Python 3
+
+### Observações para Produção
+- A aplicação criará automaticamente o banco SQLite se não existir
+- Uploads são armazenados em `static/uploads` (considere usar armazenamento persistente)
+- Defina `FERNET_KEY` como variável de ambiente para segurança dos dados criptografados
+
 ## Estrutura Simplificada
 ```
 main.py                # Aplicação Flask principal
